@@ -8,6 +8,10 @@ name = "FoodFusionAI"
 version = "0.0.1"
 authors = [
     { name = "Kai Werk", email = "werkkai@hu-berlin.de" },
+    { name = "Jan Skowron", email = "jan.a.skowron@gmail.com" },
+    { name = "Viet Cuong Ngo", email = "vietcuongngo02vcn@gmail.com" },
+    { name = "Paul Kroker", email = "pauljakobkroker@gmail.com" },
+    { name = "Simon Schäde", email = "simon-schaede@web.de"}
 ]
 readme = "README.md"
 classifiers = [
