@@ -71,3 +71,4 @@ class DatabaseHelper:
     def insert_groceries_for_user(self, groceries: Groceries) -> int:
         pass
 
+
