@@ -1,5 +1,6 @@
 from typing import List
-from src.backend.models.groceries import Groceries
+from components.groceries import Groceries
+
 class User:
     def __init__(self, name: str, groceries: List[Groceries]):
         self.name = name
