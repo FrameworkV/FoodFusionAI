@@ -18,23 +18,20 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
 ]
 keywords = [ "Food", "Fusion", "AI"]
-#Vercel benötigt 3.12
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 dependencies = [
 ]
 
-# für coverage später
 [tool.coverage.run]
 omit = [
     #"src/something/we/dont/want/*",
 ]
 
-# für cli später
 [project.scripts]
 
 [project.urls]
-"Homepage" = "https://github.com/kwrk1/FoodFusionAI"
-"Bug Tracker" = "https://github.com/kwrk1/FoodFusionAI/issues"
+"Homepage" = "https://github.com/FrameworkV/FoodFusionAI"
+"Bug Tracker" = "https://github.com/FrameworkV/FoodFusionAI/issues"
 
 [project.optional-dependencies]
 dev = [
