@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from database.database import DatabaseHelper
 import uvicorn
 import bcrypt
 from typing import Dict
