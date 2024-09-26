@@ -1,7 +1,7 @@
 import sqlite3
 
-from components.user import User
-from components.groceries import Groceries
+from src.backend.models.user import User
+from src.backend.models.groceries import Groceries
 
 class DatabaseHelper:
     _instance = None
