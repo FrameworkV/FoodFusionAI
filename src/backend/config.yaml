@@ -1,23 +1,28 @@
 app:
   title: "FoodFusionAI"
   version: "0.0.1"
-  local:                                        # local for development and testing purposes
+  status: "dev"                                               # set to "prod" when launching
+
+api:
+  version: "v0.0.1"
+  description: "Access to the LLM and the user's data"
+  local:                                                      # local for development and testing purposes
     host: "127.0.0.1"
     port: 8000
   hosted:
     url: "todo"
 
 llm:
-  model_name: "google/flan-t5-base"             # flan-t5-large, if poor performance
-  max_tokens: 512                               # max input tokens
+  model_name: "google/flan-t5-base"                           # flan-t5-large, if poor performance
+  max_tokens: 512                                             # max input tokens
   temperature: 0.7             
 
 database:
   url: "src/backend/database/todo.db"   
-  echo: true                                    # change to false when launching                   
+  echo: true                                                  # change to false when launching                   
 
 logging:
-  level: "DEBUG"                                # change to INFO when launching           
+  level: "DEBUG"                                              # change to INFO when launching           
   api: "src/backend/logs/api.log"  
   llm: "src/backend/logs/llm.log" 
   database: "src/backend/logs/database.log"           

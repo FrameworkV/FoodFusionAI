@@ -1,8 +1,8 @@
 import sqlite3
 import bcrypt
 
-from src.backend.models.user import User
-from src.backend.models.groceries import Groceries
+from backend.models.user import User
+from backend.models.groceries import Groceries
 
 class DatabaseHelper:
     _instance = None
@@ -23,7 +23,7 @@ class DatabaseHelper:
         cursor.execute(""" CREATE TABLE IF NOT EXISTS storage(
                                 id integer PRIMARY KEY,
                                 name text,
-                                user_id integer,
+                                user_id integer
                                ); """)
     @classmethod
     def instance(cls):
