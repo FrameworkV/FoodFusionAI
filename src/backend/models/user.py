@@ -1,6 +1,6 @@
 import sqlite3
 from typing import List
-from components.groceries import Groceries
+from src.backend.models.groceries import Groceries
 
 class User:
     def __init__(self, name: str, groceries: List[Groceries]):
