@@ -1,11 +1,18 @@
-import sqlite3
-from typing import List
-from backend.models.groceries import Groceries
+from typing import Optional
+from enum import Enum
+from sqlmodel import SQLModel, Field
 
-class User:
-    def __init__(self, name: str, groceries: List[Groceries]):
-        self.name = name
-        self.groceries = groceries
+class Roles(str, Enum):
+    user = "user"
+    admin = "admin"
 
-    def get_name(self) -> str:
-        return self.name
+class BaseUser(SQLModel):
+    username: str = Field(index=True, unique=True)
+    role: Roles
+
+class DBUser(BaseUser, table=True):     # User for the database table 
+    id: Optional[int] = Field(default=None, primary_key=True)   # automatically assign user id
+    hashed_password: str
+
+class User(BaseUser):       # User from the API input
+    password: str
