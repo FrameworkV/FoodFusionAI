@@ -22,7 +22,5 @@ database:
   echo: true                                                  # change to false when launching                   
 
 logging:
-  level: "DEBUG"                                              # change to INFO when launching           
-  api: "src/backend/logs/api.log"  
-  llm: "src/backend/logs/llm.log" 
-  database: "src/backend/logs/database.log"           
+  level: "DEBUG"                                                      
+  path: "src/backend/logs/logs.log"           

@@ -1,13 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from backend.logs.loggers import create_logger
 from backend.utils import config
-
 from backend.routers.users import user_router
 from backend.routers.requests import requests_router
-
-api_logger = create_logger("api", config['logging']['api'])
 
 app = FastAPI()
 
