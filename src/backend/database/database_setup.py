@@ -2,7 +2,7 @@ from sqlmodel import Session, SQLModel, create_engine
 from typing import Generator
 import os
 from backend.models.groceries import Grocery
-from backend.models.user import DBUser
+from backend.models.user import User
 
 path = os.path.dirname(os.path.abspath(__file__))
 SQLITE_URL = f"sqlite:///{path}/users.db"

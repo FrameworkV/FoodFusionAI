@@ -4,7 +4,7 @@ from jose import jwt
 from dotenv import load_dotenv
 import os
 from datetime import datetime, timedelta, timezone
-from backend.models.user import DBUser
+from backend.models.user import User
 
 load_dotenv()
 SECRET_KEY = os.getenv("JWT_SECRET_KEY")
@@ -21,7 +21,7 @@ def valid_password(password: str, hashed_password: str) -> bool:
     return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 
-def create_access_token(user: DBUser, expires: timedelta = timedelta(minutes=15)):
+def create_access_token(user: User, expires: timedelta = timedelta(minutes=15)):
     claims = {
         "sub": user.username,
         "role": user.role,
