@@ -1,11 +1,18 @@
-import sqlite3
-from typing import List
-from components.groceries import Groceries
+from typing import Optional, List
+from enum import Enum
+from sqlmodel import SQLModel, Field, Relationship
+from pydantic import EmailStr
 
-class User:
-    def __init__(self, name: str, groceries: List[Groceries]):
-        self.name = name
-        self.groceries = groceries
+class Roles(str, Enum):
+    user = "user"
+    admin = "admin"
 
-    def get_name(self) -> str:
-        return self.name
+class User(SQLModel, table=True):  # User for the database table
+    id: Optional[int] = Field(default=None, primary_key=True)  # automatically assign user id
+    username: str = Field(index=True, unique=True)
+    hashed_password: str
+    email: EmailStr
+    is_verified: bool = False
+
+    groceries: List["Grocery"] = Relationship(back_populates="user")
+
