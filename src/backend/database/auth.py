@@ -1,5 +1,6 @@
 import bcrypt
 from fastapi.security import OAuth2PasswordBearer
+from fastapi import Depends, HTTPException
 from jose import jwt
 from dotenv import load_dotenv
 import os
@@ -32,3 +33,22 @@ def create_access_token(user: User, expires: timedelta = timedelta(minutes=15)):
 
 def decode_access_token(token: str) -> dict:
     return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+
+
+def verify_token(token):
+    try:
+        payload = jwt.decode(token, key=SECRET_KEY)
+
+        return payload
+    except Exception as e:
+        raise Exception(f"Wrong token: {e}")
+
+
+def check_active(token: str = Depends(oauth2_schema)):
+    payload = verify_token(token)
+    active = payload["active"]
+
+    if not active:
+        raise HTTPException(status_code=401, detail="Activate your account first")
+    else:
+        return payload
