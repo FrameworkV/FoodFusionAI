@@ -11,7 +11,7 @@ load_dotenv()
 SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 ALGORITHM = "HS256"
 # automate log in for secured endpoints
-oauth2_schema = OAuth2PasswordBearer(tokenUrl="login")  # url equal to the path of the login endpoint
+oauth2_schema = OAuth2PasswordBearer(tokenUrl="/users/login")  # url equal to the path of the login endpoint
 
 
 def create_password_hash(password: str) -> str:
@@ -21,15 +21,15 @@ def create_password_hash(password: str) -> str:
 def valid_password(password: str, hashed_password: str) -> bool:
     return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
 
-
 def create_access_token(user: User, expires: timedelta = timedelta(minutes=15)):
     claims = {
         "sub": user.username,
-        "role": user.role,
+        "email": user.email,
+        "active": user.is_verified,
         "exp": datetime.now(timezone.utc) + expires
     }
-    return jwt.encode(claims, SECRET_KEY, algorithm=ALGORITHM)
 
+    return jwt.encode(claims, SECRET_KEY, algorithm=ALGORITHM)
 
 def decode_access_token(token: str) -> dict:
     return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])

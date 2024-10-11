@@ -36,14 +36,9 @@ dependencies = [
     # ------------------
     "numpy==2.1.1",
     "pandas==2.2.3",
-<<<<<<< HEAD
-    "sqlmodel",
-    "jose",
-=======
-    "email==4.0.2"
->>>>>>> feature/api
+    "sqlmodel==0.0.22",
+    "pydantic[email]==2.9.2"
 ]
-
 [tool.coverage.run]
 omit = [
     #"src/something/we/dont/want/*",

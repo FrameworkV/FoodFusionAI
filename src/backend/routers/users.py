@@ -16,12 +16,12 @@ async def create_user(user: User, db: Session = Depends(database_setup.get_sessi
 
     try:
         crud.create_user(db, user)
-        logger.info(f"User {user.username} created successfully")
 
         token = auth.create_access_token(user)
         logger.info(f"Attempt to send verification email to user {user.username}")
         send_mail(user.email, user.username, token)
         logger.info(f"Verification email successfully sent to user {user.username}")
+        logger.info(f"User {user.username} created successfully")
 
         return {"message": f"User {user.username} created successfully"}
     except Exception as e:

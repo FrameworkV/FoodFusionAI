@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from database.database import DatabaseHelper
 import uvicorn
 from dotenv import load_dotenv
 load_dotenv(override=True)
