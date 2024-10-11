@@ -7,7 +7,7 @@ api:
   version: "v0.0.1"
   description: "Access to the LLM and the user's data"
   local:                                                      # local for development and testing purposes
-    host: "127.0.0.1"
+    host: "0.0.0.0"
     port: 8000
   hosted:
     url: "todo"
