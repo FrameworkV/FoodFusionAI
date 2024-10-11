@@ -20,7 +20,7 @@ classifiers = [
 keywords = [ "Food", "Fusion", "AI"]
 requires-python = ">=3.10"
 dependencies = [
-    # -- APPI --
+    # -- API --
     "fastapi==0.115.0",
     "pydantic==2.9.2",
     "uvicorn==0.30.6",
@@ -28,12 +28,12 @@ dependencies = [
     "python-multipart==0.0.10",
     "bcrypt==4.2.0",
     # -----------
-    "pyyaml==6.0.2",
-    "python-dotenv==1.0.1",
     # -- Hugging face --
     "transformers==4.44.2",
     "datasets==3.0.0",
     # ------------------
+    "pyyaml==6.0.2",
+    "python-dotenv==1.0.1",
     "numpy==2.1.1",
     "pandas==2.2.3",
     "sqlmodel==0.0.22",
