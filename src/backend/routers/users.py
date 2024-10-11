@@ -69,8 +69,8 @@ async def verify_user(token: str, db: Session = Depends(database_setup.get_sessi
 
         return registration_confirmation(username)
     except Exception as e:
-        logger.warning(f"Error verifying user {username}, Exception: {e}")
-        raise HTTPException(status_code=500, detail=f"Error verifying user {username}, Exception: {e}")
+        logger.warning(f"Error verifying user  with token {token}, Exception: {e}")
+        raise HTTPException(status_code=500, detail=f"Error verifying user  with token {token}, Exception: {e}")
 
 async def _get_user(db: Session = Depends(database_setup.get_session), token: str = Depends(auth.oauth2_schema)) -> User:
     """
