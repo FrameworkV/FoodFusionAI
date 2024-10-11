@@ -5,7 +5,7 @@ from backend.utils import config
 
 email = os.getenv("EMAIL")
 password = os.getenv("PASSWORD")
-print(password)
+
 def registration_confirmation(username: str) -> str:
     email_content = f"""
     <!DOCTYPE html>
