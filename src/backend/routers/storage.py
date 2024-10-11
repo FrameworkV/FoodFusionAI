@@ -23,7 +23,7 @@ async def upload_receipt(receipt: UploadFile, db: Session = Depends(database_set
             logger.warning(f"User {user.username} tried uploading an invalid file type: {receipt.content_type}. Only {file_types} are allowed")
             raise HTTPException(status_code=400, detail=f"User {user.username} tried uploading an invalid file type: {receipt.content_type}. Only {file_types} are allowed")
         
-        groceries = process_receipt(content)
+        groceries = process_receipt(content)    # TODO correct name/class from feature/receipt branch
 
         crud.update_items(db, groceries, user)
 
@@ -49,7 +49,7 @@ async def get_items(db: Session = Depends(database_setup.get_session), user: Use
         raise HTTPException(status_code=500, detail=f"Error retrieving items for user {user.username}: {e}")
 
 @storage_router.post("/items/add_items")
-async def add_items(groceries: Item, db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
+async def add_items(groceries: List[Item], db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
     logger.info(f"Attempt to add items for user {user.username}")
     
     try:
@@ -63,7 +63,7 @@ async def add_items(groceries: Item, db: Session = Depends(database_setup.get_se
         raise HTTPException(status_code=500, detail=f"Error adding items for user {user.username}: {e}")
 
 @storage_router.put("/items/update_items")
-async def update_items(groceries: Item, db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
+async def update_items(groceries: List[Item], db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
     logger.info(f"Attempt to delete items for user {user.username}")
     
     try:
@@ -77,7 +77,7 @@ async def update_items(groceries: Item, db: Session = Depends(database_setup.get
         raise HTTPException(status_code=500, detail=f"Error deleting items for user {user.username}: {e}")
     
 @storage_router.delete("/items/delete_items")
-async def delete_items(groceries: Item, db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
+async def delete_items(groceries: List[Item], db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
     logger.info(f"Attempt to delete items for user {user.username}")
     
     try:    
