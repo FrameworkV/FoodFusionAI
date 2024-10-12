@@ -1,12 +1,11 @@
 from sqlmodel import Session, SQLModel, create_engine
 from typing import Generator
 import os
-from backend.models.groceries import Item
-from backend.models.user import User
+from backend.utils import config
 
 path = os.path.dirname(os.path.abspath(__file__))
 SQLITE_URL = f"sqlite:///{path}/users.db"
-engine = create_engine(SQLITE_URL, echo=True)
+engine = create_engine(SQLITE_URL, echo=config['database']['echo'])
 
 
 def get_session() -> Generator:
