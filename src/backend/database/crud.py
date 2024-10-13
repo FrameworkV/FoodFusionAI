@@ -1,7 +1,6 @@
 from sqlmodel import Session, select
 from backend.database.auth import create_password_hash
 from backend.models.user import User
-from backend.verification_mail import email
 
 
 def create_user(db: Session, user: User):

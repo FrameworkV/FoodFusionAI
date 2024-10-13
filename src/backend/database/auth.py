@@ -1,3 +1,4 @@
+import random
 import bcrypt
 from typing import Dict, Any
 from fastapi.security import OAuth2PasswordBearer
@@ -30,6 +31,9 @@ def create_access_token(user: User, expires: timedelta = timedelta(minutes=15)) 
     }
 
     return jwt.encode(claims, SECRET_KEY, algorithm=ALGORITHM)
+
+def create_reset_code() -> int:
+    return random.randint(100000, 999999)
 
 def decode_access_token(token: str) -> Dict[str, Any]:
     return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
