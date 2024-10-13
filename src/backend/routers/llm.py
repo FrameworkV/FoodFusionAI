@@ -3,7 +3,7 @@ from sqlmodel import Session
 from typing import Dict, List
 from backend.logs.logger_config import logger
 from backend.database import database_setup, crud, auth
-from backend.models.requests import DummyRequest
+from backend.models.llm_requests import DummyRequest
 from backend.models.user import User
 from backend.routers.users import _get_user
 
