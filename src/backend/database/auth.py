@@ -4,12 +4,10 @@ from typing import Dict, Any
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, HTTPException
 from jose import jwt
-from dotenv import load_dotenv
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 from backend.models.user import User
 
-load_dotenv()
 SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 ALGORITHM = "HS256"
 
@@ -26,8 +24,7 @@ def create_access_token(user: User, expires: timedelta = timedelta(minutes=15)) 
     claims = {
         "sub": user.username,
         "email": user.email,
-        "active": user.is_verified,
-        "exp": datetime.now(timezone.utc) + expires
+        "active": user.is_verified
     }
 
     return jwt.encode(claims, SECRET_KEY, algorithm=ALGORITHM)
@@ -44,7 +41,7 @@ def verify_token(token: str) -> Dict[str, Any]:
 
         return payload
     except Exception as e:
-        raise Exception(f"Wrong token: {e}")
+        raise Exception(f"Error with token: {e}")
 
 def check_active(token: str = Depends(oauth2_schema)) -> Dict[str, Any]:
     payload = verify_token(token)
