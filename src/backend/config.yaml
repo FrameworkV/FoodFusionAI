@@ -13,14 +13,15 @@ api:
     url: "todo"
 
 llm:
-  model_name: "google/flan-t5-base"                           # flan-t5-large, if poor performance
-  max_tokens: 512                                             # max input tokens
+  model_name: "gemini-1.5-flash"
+  embedding_model: "models/text-embedding-004"
+  max_tokens: 1048576
   temperature: 0.7             
 
 database:
   url: "src/backend/database/todo.db"   
-  echo: true                                                  # change to false when launching                   
+  echo: true
 
 logging:
-  level: "DEBUG"                                                      
+  level: "INFO"
   path: "src/backend/logs/logs.log"           
