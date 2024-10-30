@@ -36,5 +36,6 @@ async def stream_formatter(user_id: int, chat_id: str, response_stream: Iterable
         yield ModelResponse(
             user_id=user_id,
             chat_id=chat_id,
-            response=response
+            response=response,
+            is_last=True
         )
