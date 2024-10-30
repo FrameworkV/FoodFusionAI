@@ -16,20 +16,19 @@ class ChatHistory(DynamoDBChatMessageHistory):
         super().__init__(table_name=table_name, session_id=chat_id, key={"UserId": user_id, "SessionId": chat_id})
         self.chat_id = chat_id
         self.user_id = user_id
-        self.history = DynamoDBChatMessageHistory(table_name=table_name, session_id=self.chat_id, key={"UserId": user_id, "SessionId": chat_id})
 
     def add_to_chat_history(self, message: str, role: str) -> None:
         if role == "human":
-            self.history.add_user_message(message)
+            self.add_user_message(message)  # from DynamoDBChatMessageHistory
 
         if role == "ai":
-            self.history.add_ai_message(message)
+            self.add_ai_message(message)    # from DynamoDBChatMessageHistory
 
     def get_messages(self) -> List[ChatMessage]:
         """
         Retrieve the messages of a chat
         """
-        # query only looks for matching entries, scan searches the whole table
+        # query only looks for matching entries (more efficient), scan searches the whole table
         response = self.table.query(
             KeyConditionExpression="#uid = :uid AND #sid = :sid",
             ExpressionAttributeNames={  # placeholders
