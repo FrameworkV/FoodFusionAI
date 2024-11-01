@@ -2,7 +2,7 @@ import sqlite3
 import bcrypt
 
 from backend.models.user import User
-from backend.models.groceries import Groceries
+from backend.models.groceries import Item
 
 class DatabaseHelper:
     _instance = None
@@ -93,7 +93,7 @@ class DatabaseHelper:
     def delete_user(self, user: User) -> int:
         pass
 
-    def insert_groceries_for_user(self, groceries: Groceries) -> int:
+    def insert_groceries_for_user(self, groceries: Item) -> int:
         pass
 
     def valid_password(self, username: str, password: str) -> bool:
