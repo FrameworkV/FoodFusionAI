@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <head>
+      <title>FoodFusionAI</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Großes Textfeld</title>
+    <style>
+        .large-textarea {
+            width: 100%;
+            height: 400px; /* Größe des Textfelds anpassen */
+            border: 2px solid black; /* Schwarzer Rahmen */
+            padding: 10px;
+            font-size: 16px;
+            resize: none; /* Deaktiviert die Größenänderung */
+        }
+    </style>
+  </head>
+  </head>
+  <body>
+    <h1>FoodFusionAI</h1>
+    <h2>Landing Page</h2>
+    <form action="zielseite.html" method="post" name="mein-formular">
+        <ul>
+            <li>Registriere Dich bei FoodFusionAI
+                <table>
+                    <tr><td>Benutzername:<td><input name="username" type="text" size="20" maxlength="20" required autofocus>
+                    <tr><td>E-Mail-Adresse:<td><input type="email" name="mailadresse" required="required">
+                    <tr><td>Allergien:<td><input type="text" name="wohnort" list="cities">
+                                            <datalist id="cities">
+                                                <select>
+                                                    <option value="glutenfrei">glutenfrei</option>
+                                                    <option value="laktoseintolerant">laktoseintolerant</option>
+                                                    <option value="tbd">tbd</option>
+                                                </select>
+                                            </datalist>
+                </table>
+        </ul>
+        <input type="submit" value="Absenden">
+    </form>
+
+    <textarea class="large-textarea" placeholder="Hier deinen Text eingeben..."></textarea>
+
+</body>
+</html>
