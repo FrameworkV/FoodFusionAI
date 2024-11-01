@@ -1,18 +1,16 @@
+from datetime import datetime
 from typing import Optional, List
-from enum import Enum
 from sqlmodel import SQLModel, Field, Relationship
 from pydantic import EmailStr
 
-class Roles(str, Enum):
-    user = "user"
-    admin = "admin"
-
-class User(SQLModel, table=True):  # User for the database table
-    id: Optional[int] = Field(default=None, primary_key=True)  # automatically assign user id
+class User(SQLModel, table=True):
+    id: Optional[int] = Field(index=True, default=None, primary_key=True)  # automatically assign user id
     username: str = Field(index=True, unique=True)
-    hashed_password: str
-    email: EmailStr
-    is_verified: bool = False
+    password: str
+    email: EmailStr = Field(index=True, unique=True)
+    reset_code: Optional[int] = Field(default=None)
+    reset_code_expiration: Optional[datetime] = Field(default=None)
+    is_verified: bool = Field(default=False)
 
-    groceries: List["Grocery"] = Relationship(back_populates="user")
+    groceries: List["Item"] = Relationship(back_populates="user")
 

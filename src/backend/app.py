@@ -1,17 +1,14 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from database.database import DatabaseHelper
 import uvicorn
-import bcrypt
-from typing import Dict
-from utils import config
-from api_models.models import UserModel, UserRequestModel
-from models.user import User
-from database.database import DatabaseHelper
+from dotenv import load_dotenv
+load_dotenv(override=True)
+from backend.utils import config
+from backend.routers.users import user_router
+from backend.routers.storage import storage_router
+from backend.routers.llm import llm_router
 
-dh = DatabaseHelper.instance()
-
-app = FastAPI()
+app = FastAPI(title=config['app']['title'], version=config['api']['version'])
 
 app.add_middleware(
     CORSMiddleware,
@@ -21,45 +18,16 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+app.include_router(user_router)
+app.include_router(storage_router)
+app.include_router(llm_router)
+
 @app.get("/")
 async def read_root():
     return {
         "API version": config['api']['version'],
         "description": config['api']['description']
     }
-
-@app.post("/create_user")
-async def create_user(user: UserModel) -> Dict[str, str]:
-    hashed_password = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-
-    try:
-        dh.add_user(user.username, hashed_password)
-
-        return {"message": f"User {user.username} created successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error creating user: {e}")
-
-async def authenticate_user(user: UserModel) -> User:
-    if not user.username or not user.password:
-        raise HTTPException(status_code=400, detail="Username or password missing")
-    
-    try:
-        user_object = dh.get_user(user.username)
-
-        if not user_object:
-            raise HTTPException(status_code=404, detail="User not found")  
-        
-        if not dh.valid_password(user.username, user.password):                            
-            raise HTTPException(status_code=403, detail="Invalid password")
-        
-        return user_object
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error authenticating user: {e}")
-    
-@app.post("/dummy_request")
-async def dummy_request(user_request: UserRequestModel, user: User = Depends(authenticate_user)) -> Dict[str, str]:
-    return {"message": user_request.request}
 
 if __name__ == "__main__":
     if config['app']['status'] == "dev":
