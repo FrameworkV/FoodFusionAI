@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, HTTPException
 from jose import jwt
 import os
-from datetime import timedelta
+from datetime import timedelta, datetime, timezone
 from backend.models.user import User
 
 SECRET_KEY = os.getenv("JWT_SECRET_KEY")
@@ -20,13 +20,14 @@ def create_password_hash(password: str) -> str:
 def valid_password(password: str, hashed_password: str) -> bool:
     return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
 
-def create_access_token(user: User, expires: timedelta = timedelta(minutes=15)) -> str:
+def create_access_token(user: User, expires: timedelta = timedelta(minutes=1)) -> str:
+    expire_time = datetime.now(timezone.utc) + expires
     claims = {
         "sub": user.username,
         "email": user.email,
-        "active": user.is_verified
+        "active": user.is_verified,
+        "exp": expire_time
     }
-
     return jwt.encode(claims, SECRET_KEY, algorithm=ALGORITHM)
 
 def create_reset_code() -> int:
@@ -51,3 +52,11 @@ def check_active(token: str = Depends(oauth2_schema)) -> Dict[str, Any]:
         raise HTTPException(status_code=401, detail="Activate your account first")
     else:
         return payload
+
+
+#TODO
+def create_refresh_token():
+    return
+#TODO: Dependency to get the refresh token from headers
+def get_refresh_token():
+    return
