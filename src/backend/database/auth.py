@@ -20,8 +20,8 @@ def create_password_hash(password: str) -> str:
 def valid_password(password: str, hashed_password: str) -> bool:
     return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
 
-def create_access_token(user: User, expires: timedelta = timedelta(minutes=1)) -> str:
-    expire_time = datetime.now(timezone.utc) + expires
+def create_access_token(user: User, expires: timedelta = timedelta(minutes=2)) -> str:
+    expire_time = datetime.now(timezone.utc) + expires #TODO check if this is the correct way for all timezones
     claims = {
         "sub": user.username,
         "email": user.email,
@@ -54,9 +54,14 @@ def check_active(token: str = Depends(oauth2_schema)) -> Dict[str, Any]:
         return payload
 
 
-#TODO
-def create_refresh_token():
-    return
-#TODO: Dependency to get the refresh token from headers
-def get_refresh_token():
-    return
+
+def create_refresh_token(user: User, expires: timedelta = timedelta(days=7)):
+    expire_time = datetime.now(timezone.utc) + expires  # TODO check if this is the correct way for all timezones
+    claims = {
+        "sub": user.username,
+        "type": "refresh",
+        "exp": expire_time
+    }
+    return jwt.encode(claims, SECRET_KEY, algorithm=ALGORITHM)
+
+

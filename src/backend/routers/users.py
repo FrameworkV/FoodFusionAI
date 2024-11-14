@@ -49,9 +49,8 @@ async def login(db: Session = Depends(database_setup.get_session), data: OAuth2P
             raise HTTPException(status_code=401, detail=f"Invalid password for user {data.username}")
 
         access_token = auth.create_access_token(user)
-
+        refresh_token = auth.create_refresh_token(user) #TODO return refresh token
         logger.info(f"User {data.username} logged in successfully")
-
         return {"access_token": access_token, "token_type": "bearer"}
     except Exception as e:
         logger.warning(f"Error logging in user {data.username}, Exception: {e}")
