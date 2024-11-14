@@ -49,3 +49,9 @@ def update_user(db: Session, updated_user: User):
         db.refresh(db_user)
 
     return db_user
+
+
+def delete_user(db: session, username: str):
+    statement = select(User).where(User.username == username)
+    deleted_user = db.exec(statement).first()
+    db.delete(deleted_user)
