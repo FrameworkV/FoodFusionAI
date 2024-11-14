@@ -55,4 +55,3 @@ def delete_user(db: Session, username: str):
     statement = select(User).where(User.username == username)
     deleted_user = db.exec(statement).first()
     db.delete(deleted_user)
-    
