@@ -1,5 +1,5 @@
 import time
-from typing import List, Dict
+from typing import List, Dict, Union
 from azure.cosmos import CosmosClient
 from langchain.schema import HumanMessage, AIMessage, BaseMessage
 import os
@@ -40,8 +40,8 @@ class ChatHistory:
 
         container.upsert_item(item)
 
-    def get_messages(self, formatted=False) -> List[BaseMessage]:
-        query = f"SELECT c.id, c.role, c.message FROM ChatsContainer c WHERE c.user_id = @user_id AND STARTSWITH(c.id, @chat_id)"   # message id starts with chat id
+    def get_messages(self, formatted=False) -> Union[List[Dict[str, str]], List[BaseMessage]]:
+        query = f"SELECT c.id, c.role, c.message FROM ChatsContainer c WHERE c.user_id = @user_id AND c.chat_id = @chat_id"
 
         messages = container.query_items(
             query=query,
@@ -64,9 +64,46 @@ class ChatHistory:
 
         return items
 
-    def get_chat_titles(self):
-        # TODO extra container for chat titles?
-        pass
+    def get_chat_titles(self) -> List[Dict[str, str]]:
+        chat_titles = []
+
+        # TODO inefficiency --> store in SQL database?
+        get_chat_ids_query = f"SELECT DISTINCT c.chat_id FROM ChatsContainer c WHERE c.user_id = @user_id"
+
+        chat_ids = container.query_items(  # [{chat_id: ...}]
+            query=get_chat_ids_query,
+            parameters=[
+                dict(
+                    name="@user_id",
+                    value=self.user_id,
+                )
+            ]
+        )
+
+        for chat_id_dict in chat_ids:
+            chat_id = chat_id_dict["chat_id"]
+            query = f"SELECT c.message FROM ChatsContainer c WHERE c.user_id = @user_id AND c.chat_id = @chat_id"
+
+            messages = container.query_items(
+                query=query,
+                parameters=[
+                    dict(
+                        name="@user_id",
+                        value=self.user_id,
+                    ),
+                    dict(
+                        name="@chat_id",
+                        value=chat_id,
+                    )
+                ]
+            )
+
+            first_message = next(messages, None)
+
+            if first_message:
+                chat_titles.append({"chat_id": chat_id, "title": f"{first_message['message'][:15]}..."})
+
+        return chat_titles
 
     def delete_chat(self) -> None:
         messages = self.get_messages()

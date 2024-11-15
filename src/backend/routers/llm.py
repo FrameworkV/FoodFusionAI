@@ -1,4 +1,5 @@
-from typing import List, Dict
+from typing import List, Dict, Union
+from langchain.schema import BaseMessage
 from fastapi import APIRouter, Depends, HTTPException
 from sse_starlette.sse import EventSourceResponse
 from backend.logs.logger_config import logger
@@ -29,7 +30,7 @@ async def get_chats(user: User = Depends(_get_user)) -> List[Dict[str, str]]:
 
 # get chat messages for a specific chat
 @llm_router.get("/llm/get_chat/{chat_id}")
-async def get_chat(chat_id: str, user: User = Depends(_get_user)) -> List[ChatMessage]:
+async def get_chat(chat_id: str, user: User = Depends(_get_user)) -> Union[List[Dict[str, str]], List[BaseMessage]]:
     logger.info(f"Attempt to retrieve chat with id {chat_id} for user {user.username}")
 
     try:
