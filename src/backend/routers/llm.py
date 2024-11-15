@@ -48,7 +48,7 @@ async def delete_chat(chat_id: str, user: User = Depends(_get_user)) -> Dict[str
     logger.info(f"Attempt to delete chat with id {chat_id} for user {user.username}")
 
     try:
-        ChatHistory(user_id=user.id, chat_id=chat_id).delete_history()
+        ChatHistory(user_id=user.id, chat_id=chat_id).delete_chat()
 
         logger.info(f"Successfully deleted chat with id {chat_id} for user {user.username}")
 
@@ -64,11 +64,11 @@ async def create_recipe(user_request: UserRequest, user: User = Depends(_get_use
     try:
         chat_history = ChatHistory(user_id=user.id, chat_id=user_request.chat_id)
 
-        chat_history.add_to_chat_history(message=user_request.request, role="human")
+        chat_history.add_message(message=user_request.request, role="human")
         response_stream = recipe(user_request.request).stream(
             {
                 "preferences": ["glutenfrei", "vegan"], # todo preferences in user table
-                "chat_history": chat_history.messages
+                "chat_history": chat_history.get_messages(formatted=True)
             }
         )
 
