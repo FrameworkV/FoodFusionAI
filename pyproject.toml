@@ -12,15 +12,15 @@ authors = [
 ]
 readme = "README.md"
 classifiers = [
-    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
 ]
 keywords = ["Food", "Fusion", "AI"]
-requires-python = ">=3.10"
+requires-python = ">=3.11,<3.12"
 
 [
 tool.poetry.dependencies
 ]
-python = ">=3.10,<3.11"
+python = ">=3.11,<3.12"
 fastapi = "0.115.0"
 pydantic = {version = "2.9.2", extras = ["email"]}
 uvicorn = "0.30.6"
