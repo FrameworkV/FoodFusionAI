@@ -5,7 +5,7 @@ from pydantic import EmailStr
 from backend.utils import config
 
 smtp_email = os.getenv("EMAIL")
-smtp_password = os.getenv("PASSWORD")
+smtp_password = os.getenv("EMAIL_PASSWORD")
 
 def registration_confirmation(username: str) -> str:
     email_content = f"""
