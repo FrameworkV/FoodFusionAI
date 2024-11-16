@@ -3,11 +3,11 @@ name = "food-fusion-ai"
 version = "0.0.1"
 description = "A groceries management using AI technology."
 authors = [
-    { name = "Kai Werk", email = "werkkai@hu-berlin.de" },
-    { name = "Jan Skowron", email = "jan.a.skowron@gmail.com" },
-    { name = "Viet Cuong Ngo", email = "vietcuongngo02vcn@gmail.com" },
-    { name = "Paul Kroker", email = "pauljakobkroker@gmail.com" },
-    { name = "Simon Schaede", email = "simon-schaede@web.de"}
+    "Kai Werk <werkkai@hu-berlin.de>",
+    "Jan Skowron <jan.a.skowron@gmail.com>",
+    "Viet Cuong Ngo <vietcuongngo02vcn@gmail.com>",
+    "Paul Kroker <pauljakobkroker@gmail.com>",
+    "Simon Schaede <simon-schaede@web.de>"
 ]
 readme = "README.md"
 classifiers = [
