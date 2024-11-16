@@ -80,6 +80,6 @@ jobs:
           app-name: 'foodfusionai'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C9670A8917A243EBB30AAD5AC2584D1A }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
           scm-do-build-during-deployment: true
           enable-oryx-build: true
