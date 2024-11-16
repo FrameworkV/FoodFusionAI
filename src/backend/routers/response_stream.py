@@ -26,12 +26,12 @@ async def stream_formatter(user_id: int, chat_id: str, response_stream: Iterable
             is_last=True
         )
 
-        ChatHistory(user_id=user_id, chat_id=chat_id).add_to_chat_history(message=response, role="ai")
+        ChatHistory(user_id=user_id, chat_id=chat_id).add_message(message=response, role="ai")
     else:
         for chunk in response_stream:
             response += chunk
 
-        ChatHistory(user_id=user_id, chat_id=chat_id).add_to_chat_history(message=response, role="ai")  # no stream --> one element --> code after yield unreachable
+        ChatHistory(user_id=user_id, chat_id=chat_id).add_message(message=response, role="ai")  # no stream --> one element --> code after yield unreachable
 
         yield ModelResponse(
             user_id=user_id,

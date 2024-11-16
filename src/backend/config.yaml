@@ -19,7 +19,10 @@ llm:
   temperature: 0.7             
 
 database:
-  url: "src/backend/database/todo.db"   
+  sql_database:
+    server: "foodfusionai"
+    database_name: "users"
+    username: "adminuser"
   echo: true
 
 logging:

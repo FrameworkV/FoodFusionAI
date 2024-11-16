@@ -1,4 +1,5 @@
-from typing import List, Dict
+from typing import List, Dict, Union
+from langchain.schema import BaseMessage
 from fastapi import APIRouter, Depends, HTTPException
 from sse_starlette.sse import EventSourceResponse
 from backend.logs.logger_config import logger
@@ -29,7 +30,7 @@ async def get_chats(user: User = Depends(_get_user)) -> List[Dict[str, str]]:
 
 # get chat messages for a specific chat
 @llm_router.get("/llm/get_chat/{chat_id}")
-async def get_chat(chat_id: str, user: User = Depends(_get_user)) -> List[ChatMessage]:
+async def get_chat(chat_id: str, user: User = Depends(_get_user)) -> Union[List[Dict[str, str]], List[BaseMessage]]:
     logger.info(f"Attempt to retrieve chat with id {chat_id} for user {user.username}")
 
     try:
@@ -48,7 +49,7 @@ async def delete_chat(chat_id: str, user: User = Depends(_get_user)) -> Dict[str
     logger.info(f"Attempt to delete chat with id {chat_id} for user {user.username}")
 
     try:
-        ChatHistory(user_id=user.id, chat_id=chat_id).delete_history()
+        ChatHistory(user_id=user.id, chat_id=chat_id).delete_chat()
 
         logger.info(f"Successfully deleted chat with id {chat_id} for user {user.username}")
 
@@ -64,11 +65,11 @@ async def create_recipe(user_request: UserRequest, user: User = Depends(_get_use
     try:
         chat_history = ChatHistory(user_id=user.id, chat_id=user_request.chat_id)
 
-        chat_history.add_to_chat_history(message=user_request.request, role="human")
+        chat_history.add_message(message=user_request.request, role="human")
         response_stream = recipe(user_request.request).stream(
             {
                 "preferences": ["glutenfrei", "vegan"], # todo preferences in user table
-                "chat_history": chat_history.messages
+                "chat_history": chat_history.get_messages(formatted=True)
             }
         )
 
