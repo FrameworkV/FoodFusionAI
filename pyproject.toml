@@ -1,6 +1,4 @@
-[
-tool.poetry
-]
+[tool.poetry]
 name = "food-fusion-ai"
 version = "0.0.1"
 authors = [
@@ -17,9 +15,7 @@ classifiers = [
 keywords = ["Food", "Fusion", "AI"]
 requires-python = ">=3.11,<3.12"
 
-[
-tool.poetry.dependencies
-]
+[tool.poetry.dependencies]
 python = ">=3.11,<3.12"
 fastapi = "0.115.0"
 pydantic = {version = "2.9.2", extras = ["email"]}
@@ -37,17 +33,13 @@ pyyaml = "6.0.2"
 python-dotenv = "1.0.1"
 sqlmodel = "0.0.22"
 
-[
-tool.poetry.group.dev.dependencies
-]
+[tool.poetry.group.dev.dependencies]
 twine = "*"
 black = "*"
 pytest = ">=7.2.2"
 pytest-cov = ">=4.1.0"
 pytest-html = ">=3.2.0"
 
-[
-build-system
-]
+[build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
