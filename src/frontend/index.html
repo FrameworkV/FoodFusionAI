@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodFusionAI</title>
+    <style>
+        .large-textarea {
+            width: 100%;
+            height: 400px;
+            border: 2px solid black;
+            padding: 10px;
+            font-size: 16px;
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>FoodFusionAI</h1>
+    <h2>Landing Page</h2>
+    <form id="user-form">
+        <label>Benutzername:</label><input type="text" id="username" required><br><br>
+        <label>E-Mail-Adresse:</label><input type="email" id="email" required><br><br>
+        <label>Passwort:</label><input type="text" id="password" required><br><br><br>
+        <button type="submit">Absenden</button><br><br><br>
+    </form>
+    <div class="large-textarea">Hier deinen Text eingeben...</div>
+
+    <script>
+        document.getElementById("user-form").addEventListener("submit", async function(event) {
+            event.preventDefault();  // Verhindert das normale Abschicken des Formulars
+
+            // Erfasse die Werte aus den Eingabefeldern
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            // Erstelle ein Objekt für die Nutzerdaten
+            const userData = {
+                username: username,
+                email: email,
+                password: password
+            };
+
+            // Sende die Daten per Fetch API an die API
+            try {
+                const response = await fetch("http://localhost:8000/users/create_user", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                if (response.ok) {
+                    const responseData = await response.json();
+                    alert("Benutzer erfolgreich erstellt: " + JSON.stringify(responseData));
+                } else {
+                    alert("Fehler beim Erstellen des Benutzers");
+                }
+            } catch (error) {
+                console.error("Fehler beim Verbinden zur API:", error);
+            }
+        });
+    </script>
+</body>
+</html>

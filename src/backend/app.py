@@ -1,10 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+from dotenv import load_dotenv
+load_dotenv(override=True)
+from backend.utils import config
+from backend.routers.users import user_router
+from backend.routers.storage import storage_router
+from backend.routers.llm import llm_router
 
-from utils import config
-
-app = FastAPI()
+app = FastAPI(title=config['app']['title'], version=config['api']['version'])
 
 app.add_middleware(
     CORSMiddleware,
@@ -14,9 +18,17 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+app.include_router(user_router)
+app.include_router(storage_router)
+app.include_router(llm_router)
+
 @app.get("/")
 async def read_root():
-    return {"message": "placeholder"}
+    return {
+        "API version": config['api']['version'],
+        "description": config['api']['description']
+    }
 
 if __name__ == "__main__":
-    uvicorn.run(app, host=config['app']['local']['host'], port=config['app']['local']['port'])
+    if config['app']['status'] == "dev":
+        uvicorn.run(app, host=config['api']['local']['host'], port=config['api']['local']['port'])

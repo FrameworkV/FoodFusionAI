@@ -18,23 +18,41 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
 ]
 keywords = [ "Food", "Fusion", "AI"]
-#Vercel benötigt 3.12
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 dependencies = [
+    # -- API --
+    "fastapi==0.115.0",
+    "pydantic==2.9.2",
+    "uvicorn==0.30.6",
+    "sse-starlette==2.1.3",
+    "python-jose==3.3.0",
+    "python-multipart==0.0.10",
+    "bcrypt==4.2.0",
+    " azure-functions==1.21.3",
+    # -----------
+    # -- Azure --
+    "azure-data-tables==12.5.0",
+    # -----------
+    # -- LLM --
+    "langchain==0.3.4",
+    "langchain-community==0.3.3",
+    "langchain-google-genai==2.0.1",
+    # ------------------
+    "pyyaml==6.0.2",
+    "python-dotenv==1.0.1",
+    "sqlmodel==0.0.22",
+    "pydantic[email]==2.9.2"
 ]
-
-# für coverage später
 [tool.coverage.run]
 omit = [
     #"src/something/we/dont/want/*",
 ]
 
-# für cli später
 [project.scripts]
 
 [project.urls]
-"Homepage" = "https://github.com/kwrk1/FoodFusionAI"
-"Bug Tracker" = "https://github.com/kwrk1/FoodFusionAI/issues"
+"Homepage" = "https://github.com/FrameworkV/FoodFusionAI"
+"Bug Tracker" = "https://github.com/FrameworkV/FoodFusionAI/issues"
 
 [project.optional-dependencies]
 dev = [

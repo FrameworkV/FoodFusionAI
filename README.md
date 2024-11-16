@@ -1,18 +1,76 @@
-# FoodFusionAI
+<div align="center">
+  <a href="https://github.com/FrameworkV/FoodFusionAI">
+    <img src="https://github.com/user-attachments/assets/7de6bd73-e637-4825-9367-3cfa0ee66a92" alt="Logo" width="200" height="200">
+  </a>
 
-the future of cooking and grocery shopping
+  <h3 align="center">FoodFusion AI</h3>
+
+  <p align="center">
+    Automated groceries management with AI (LLMs).
+    <br /><br />
+    <a><strong>Try here:</strong></a>
+    <br />
+    <br />
+    <a href="TODO">Download on Android</a>
+    ·
+    <a href="TODO">Website</a>
+  </p>
+</div>
+
+<br>
+
+## Demo
+
+TODO insert demo video
+
+<br>
+
+---
+
+<br><br>
+
+## 🌟 Features
+
+- **User profile**: Consideration of preferences, diets and allergies
+- **Automated shopping list**: Dynamic generation and customisation based on stocks and recipes
+- **Recipes**: Suggestions based on current stocks, seasonal food, allergies and more 
+- **Reminders**: Reminds you if food is about to expire
+
+Availabe on **Android** and on the **web**
+
+[![Android](https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white)](here link to the app) 
+[![Website](https://img.shields.io/badge/Website-1DBF73?style=flat&logo=internet-explorer&logoColor=white)]here link to website)
 
 
-### how to install
+<br><br>
 
-```pip install -e .[dev]```
+## ⚙️ Tech stack
 
-damit wird FoodFusionAI als editable lib installiert, 
-d.h. ihr müsst nicht nach jeder Änderung neu installieren.
-Dann könnt ihr z.B. mit ```from FoodFusionAI.backend.routes.auth import something```
-Klassen 
-und Funktionen  aus dieser File in andere Files importieren.
+### 🧠 LLM
+- **Model**: Gemini 1.5 Flash ![AI](https://img.shields.io/badge/AI-%2300BFFF.svg?&style=flat&logo=Artificial%20Intelligence&logoColor=white)
 
-Wenn ihr für ein neues Feature neue requirements benötigt fügt sie bitte in requirements.txt hinzu
+- **Embeddings model**: models/text-embedding-004
 
-Fügt euch bei authors in der project.toml hinzu
+### 🖥️ Backend:
+- **Python>=3.10**
+
+  [![Python 3.10](https://img.shields.io/badge/Python-3.10-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/downloads/release/python-3100/)
+- **Frameworks**:
+
+  ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi&logoColor=white)
+  ![SQLModel](https://img.shields.io/badge/SQLModel-00833F?style=flat&logo=sqlmodel&logoColor=white)
+  ![LangChain](https://img.shields.io/badge/LangChain-%230073e5.svg?&style=flat&logo=LangChain&logoColor=white)
+
+- **Cloud Platform**:
+    | Service | Purpose | |
+    | ----------- | ----------- | ----------- |
+    | **Azure CosmosDB** | LLM chat history storage	| ![Logos](https://skillicons.dev/icons?i=azure) |
+    | **Azure Functions** | 	API & backend logic | ![Logos](https://skillicons.dev/icons?i=azure) |
+    | **Azure SQL Database** | User & groceries database	| ![Logos](https://skillicons.dev/icons?i=azure) |
+    
+### 🎨 Frontend:
+Find anything related to the frontend here:
+
+[TODO add link app frontend]
+
+[TODO add link web frontend]
