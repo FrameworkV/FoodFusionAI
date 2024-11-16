@@ -1,6 +1,7 @@
 [tool.poetry]
 name = "food-fusion-ai"
 version = "0.0.1"
+description = "A groceries management using AI technology."
 authors = [
     { name = "Kai Werk", email = "werkkai@hu-berlin.de" },
     { name = "Jan Skowron", email = "jan.a.skowron@gmail.com" },
@@ -13,10 +14,9 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
 ]
 keywords = ["Food", "Fusion", "AI"]
-requires-python = ">=3.11,<3.12"
 
 [tool.poetry.dependencies]
-python = ">=3.11,<3.12"
+python = "^3.11"
 fastapi = "0.115.0"
 pydantic = {version = "2.9.2", extras = ["email"]}
 uvicorn = "0.30.6"
