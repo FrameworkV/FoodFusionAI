@@ -64,9 +64,10 @@ Availabe on **Android** and on the **web**
 - **Cloud Platform**:
     | Service | Purpose | |
     | ----------- | ----------- | ----------- |
-    | **Azure CosmosDB** | LLM chat history storage	| ![Logos](https://skillicons.dev/icons?i=azure) |
     | **Azure Functions** | 	API & backend logic | ![Logos](https://skillicons.dev/icons?i=azure) |
-    | **Azure SQL Database** | User & groceries database	| ![Logos](https://skillicons.dev/icons?i=azure) |
+    | **Azure Storage Account & Azure Files** | 	Storing metadata, triggers & automated CI/CD pipeline | ![Logos](https://skillicons.dev/icons?i=azure) |
+    | **Azure CosmosDB** | LLM chat history storage	| ![Logos](https://skillicons.dev/icons?i=azure) |
+    | **Azure SQL Database** | User & groceries table	| ![Logos](https://skillicons.dev/icons?i=azure) |
     
 ### 🎨 Frontend:
 Find anything related to the frontend here:
