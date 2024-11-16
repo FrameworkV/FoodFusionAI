@@ -1,64 +1,53 @@
-# setuptools > 64.0.0 for local editable installations
-[build-system]
-requires = ["setuptools >= 68.0.0", "wheel"]
-build-backend = "setuptools.build_meta"
-
-[project]
-name = "FoodFusionAI"
+[
+tool.poetry
+]
+name = "food-fusion-ai"
 version = "0.0.1"
 authors = [
     { name = "Kai Werk", email = "werkkai@hu-berlin.de" },
     { name = "Jan Skowron", email = "jan.a.skowron@gmail.com" },
     { name = "Viet Cuong Ngo", email = "vietcuongngo02vcn@gmail.com" },
     { name = "Paul Kroker", email = "pauljakobkroker@gmail.com" },
-    { name = "Simon Schäde", email = "simon-schaede@web.de"}
+    { name = "Simon Schaede", email = "simon-schaede@web.de"}
 ]
 readme = "README.md"
 classifiers = [
     "Programming Language :: Python :: 3.10",
 ]
-keywords = [ "Food", "Fusion", "AI"]
+keywords = ["Food", "Fusion", "AI"]
 requires-python = ">=3.10"
-dependencies = [
-    # -- API --
-    "fastapi==0.115.0",
-    "pydantic==2.9.2",
-    "uvicorn==0.30.6",
-    "sse-starlette==2.1.3",
-    "python-jose==3.3.0",
-    "python-multipart==0.0.10",
-    "bcrypt==4.2.0",
-    " azure-functions==1.21.3",
-    # -----------
-    # -- Azure --
-    "azure-data-tables==12.5.0",
-    # -----------
-    # -- LLM --
-    "langchain==0.3.4",
-    "langchain-community==0.3.3",
-    "langchain-google-genai==2.0.1",
-    # ------------------
-    "pyyaml==6.0.2",
-    "python-dotenv==1.0.1",
-    "sqlmodel==0.0.22",
-    "pydantic[email]==2.9.2"
-]
-[tool.coverage.run]
-omit = [
-    #"src/something/we/dont/want/*",
-]
 
-[project.scripts]
-
-[project.urls]
-"Homepage" = "https://github.com/FrameworkV/FoodFusionAI"
-"Bug Tracker" = "https://github.com/FrameworkV/FoodFusionAI/issues"
-
-[project.optional-dependencies]
-dev = [
-    "twine",
-    "black",
-    "pytest>=7.2.2",
-    "pytest-cov>=4.1.0",
-    "pytest-html>=3.2.0",
+[
+tool.poetry.dependencies
 ]
+python = ">=3.10,<3.11"
+fastapi = "0.115.0"
+pydantic = {version = "2.9.2", extras = ["email"]}
+uvicorn = "0.30.6"
+sse-starlette = "2.1.3"
+python-jose = "3.3.0"
+python-multipart = "0.0.10"
+bcrypt = "4.2.0"
+azure-functions = "1.21.3"
+azure-data-tables = "12.5.0"
+langchain = "0.3.4"
+langchain-community = "0.3.3"
+langchain-google-genai = "2.0.1"
+pyyaml = "6.0.2"
+python-dotenv = "1.0.1"
+sqlmodel = "0.0.22"
+
+[
+tool.poetry.group.dev.dependencies
+]
+twine = "*"
+black = "*"
+pytest = ">=7.2.2"
+pytest-cov = ">=4.1.0"
+pytest-html = ">=3.2.0"
+
+[
+build-system
+]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
