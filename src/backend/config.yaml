@@ -9,6 +9,8 @@ api:
   local:                                                      # local for development and testing purposes
     host: "0.0.0.0"
     port: 8000
+  hosted:
+    url: "foodfusion.azurewebsites.net"
 
 llm:
   model_name: "gemini-1.5-flash"
