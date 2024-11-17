@@ -7,6 +7,7 @@ python-multipart==0.0.10
 bcrypt==4.2.0
 pyodbc==5.2.0
 azure-data-tables==12.5.0
+azure-cosmos==4.8.0
 langchain==0.3.4
 langchain-community==0.3.3
 langchain-google-genai==2.0.1
