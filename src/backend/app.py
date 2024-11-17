@@ -1,12 +1,18 @@
+# # allows import from different folder
+import sys
+import os
+current = os.path.dirname(os.path.realpath(__file__))
+parent = os.path.dirname(current)
+sys.path.append(parent)
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from dotenv import load_dotenv
 load_dotenv(override=True)
-from backend.utils import config
-from backend.routers.users import user_router
-from backend.routers.storage import storage_router
-from backend.routers.llm import llm_router
+from utils import config
+from routers.users import user_router
+from routers.storage import storage_router
+from routers.llm import llm_router
 
 app = FastAPI(title=config['app']['title'], version=config['api']['version'])
 
