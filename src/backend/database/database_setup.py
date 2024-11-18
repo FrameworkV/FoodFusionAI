@@ -4,7 +4,7 @@ import os
 from backend.utils import config
 # import all tables to create them
 from backend.models.user import User
-from backend.models.groceries import ShoppingList
+from backend.models.groceries import Item, ShoppingList
 # --------------------------------
 
 # Dev
