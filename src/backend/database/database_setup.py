@@ -2,14 +2,16 @@ from sqlmodel import Session, SQLModel, create_engine
 from typing import Generator
 import os
 from backend.utils import config
+# import all tables to create them
+from backend.models.user import User
+from backend.models.groceries import Item, ShoppingList
+# --------------------------------
 
 # Dev
 if config['app']['status'] == "dev":
     path = os.path.dirname(os.path.abspath(__file__))
     url = f"sqlite:///{path}/users.db"
     engine = create_engine(url, echo=config['database']['echo'])
-
-    SQLModel.metadata.create_all(engine)
 # Prod
 else:
     # if used locally: download ODBC Driver 17 for SQL Server, add ip address to firewall rules on Azure
@@ -19,7 +21,10 @@ else:
     password = os.getenv("AZURE_SQL_DATABASE_PASSWORD")
 
     url = f"mssql+pyodbc://{username}:{password}@{server}.database.windows.net/{database}?driver=ODBC+Driver+17+for+SQL+Server"
-    engine = create_engine(url, echo=config['database']['echo'])
+    engine = create_engine(url, echo=False)
+
+SQLModel.metadata.create_all(engine)    # create all provided tables (if not already existent)
+
 
 def get_session() -> Generator:
     """

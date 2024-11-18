@@ -7,12 +7,12 @@ class UserData(BaseModel):
     email: EmailStr
 
 class UserRequest(BaseModel):
-    chat_id: str
+    chat_id: Optional[str] = None
     request: str
 
 class ModelResponse(BaseModel):
-    user_id: int
-    chat_id: str
+    user_id: Optional[int] = None
+    chat_id: Optional[int] = None
     response: str
     streamed_response: Optional[bool] = False
     is_last: Optional[bool] = False

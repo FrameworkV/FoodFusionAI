@@ -17,7 +17,7 @@ user_router = APIRouter(tags=["Users"])
 async def create_user(user: UserData, db: Session = Depends(database_setup.get_session)) -> Dict[str, str]:
     logger.info(f"Attempt to create user: {user.username}")
 
-    db_user = User(username=user.username, password=user.password, email=user.email)
+    db_user = User(username=user.username, password=auth.create_password_hash(user.password), email=user.email)
 
     try:
         crud.create_user(db, db_user)

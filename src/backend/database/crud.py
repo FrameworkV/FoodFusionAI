@@ -1,15 +1,12 @@
 from sqlmodel import Session, select
-from backend.database.auth import create_password_hash
 from backend.models.user import User
+from backend.models.groceries import ShoppingList
 
 
 def create_user(db: Session, user: User):
-    hashed_password = create_password_hash(user.password)
-    db_user = User(username=user.username, password=hashed_password, email=user.email)
-    db.add(db_user)
+    db.add(user)
     db.commit()
-    db.refresh(db_user)
-    return db_user
+    db.refresh(user)
 
 
 def get_user(db: Session, username: str):
@@ -55,3 +52,15 @@ def delete_user(db: Session, username: str):
     statement = select(User).where(User.username == username)
     deleted_user = db.exec(statement).first()
     db.delete(deleted_user)
+    db.commit()
+
+def create_shopping_list(db: Session, shopping_list: ShoppingList):
+    db.add(shopping_list)
+    db.commit()
+    db.refresh(shopping_list)
+
+def delete_shopping_list(db: Session, id: int):
+    statement = select(ShoppingList).where(ShoppingList.id == id)
+    deleted_shopping_list = db.exec(statement).first()
+    db.delete(deleted_shopping_list)
+    db.commit()

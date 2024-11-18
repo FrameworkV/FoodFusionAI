@@ -26,3 +26,7 @@ If case 2 occurs, guide the user by asking him follow up questions so he can add
 
 If none of the cases occur, only output the recipe.
 """
+
+shopping_list_prompt = """
+Create a shopping list with all needed ingredients and products based on this recipe: {recipe}
+"""
