@@ -15,3 +15,8 @@ class Item(SQLModel, table=True):
 
     # Many-to-One relationship: many groceries belong to one user
     user: "User" = Relationship(back_populates="groceries")
+
+class ShoppingList(SQLModel, table=True):
+    id: Optional[int] = Field(index=True, default=None, primary_key=True)
+    content: str
+    recipe: str

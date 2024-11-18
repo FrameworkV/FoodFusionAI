@@ -1,12 +1,12 @@
 <div align="center">
   <a href="https://github.com/FrameworkV/FoodFusionAI">
-    <img src="https://github.com/user-attachments/assets/7de6bd73-e637-4825-9367-3cfa0ee66a92" alt="Logo" width="200" height="200">
+    <img src="https://github.com/user-attachments/assets/8f6467ca-0239-401e-98ae-e802ae4b0700" alt="Logo" width="200" height="200">
   </a>
 
   <h3 align="center">FoodFusion AI</h3>
 
   <p align="center">
-    Automated groceries management with AI (LLMs).
+    Open Source groceries management with AI (LLMs).
     <br /><br />
     <a><strong>Try here:</strong></a>
     <br />
@@ -51,7 +51,7 @@ Availabe on **Android** and on the **web**
 
 - **Embeddings model**: models/text-embedding-004
 
-### 🖥️ Backend:
+### 🖥️ Backend
 - **Python>=3.10**
 
   [![Python 3.10](https://img.shields.io/badge/Python-3.10-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/downloads/release/python-3100/)
@@ -65,13 +65,24 @@ Availabe on **Android** and on the **web**
     | Service | Purpose | |
     | ----------- | ----------- | ----------- |
     | **Azure Web App** | 	API & backend logic | ![Logos](https://skillicons.dev/icons?i=azure) |
-    | **Azure Storage Account & Azure Files** | 	Storing metadata, triggers & automated CI/CD pipeline | ![Logos](https://skillicons.dev/icons?i=azure) |
     | **Azure CosmosDB** | LLM chat history storage	| ![Logos](https://skillicons.dev/icons?i=azure) |
     | **Azure SQL Database** | User & groceries table	| ![Logos](https://skillicons.dev/icons?i=azure) |
     
-### 🎨 Frontend:
+### 🛡️ Security
+
+#### Secured API endpoints
+All FastAPI endpoints are protected by security measures:
+- **Authentication and authorisation**: Only authenticated users can access protected resources (OAuth2, JWT)
+
+#### Protection of the user data
+
+The user database is additionally protected by several layers of security:
+- **Firewall**: The Azure database is configured by a firewall that only allows access from trusted IP addresses
+- **Data encryption**: All data in the database is encrypted to ensure the highest level of data security
+
+### 🎨 Frontend
 Find anything related to the frontend here:
 
-[TODO add link app frontend]
+https://github.com/FrameworkV/FoodFusionAI-Website
 
-[TODO add link web frontend]
+https://github.com/FrameworkV/FoodFusionAI-App
