@@ -11,8 +11,8 @@ class UserRequest(BaseModel):
     request: str
 
 class ModelResponse(BaseModel):
-    user_id: Optional[int] = None
-    chat_id: Optional[int] = None
+    user_id: int
+    chat_id: str
     response: str
     streamed_response: Optional[bool] = False
     is_last: Optional[bool] = False
