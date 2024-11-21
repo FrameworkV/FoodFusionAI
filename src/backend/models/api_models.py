@@ -6,6 +6,11 @@ class UserData(BaseModel):
     password: str
     email: EmailStr
 
+class UpdateUserData(BaseModel):
+    username: Optional[str] = None
+    password: Optional[str] = None
+    email: Optional[EmailStr] = None
+
 class UserRequest(BaseModel):
     chat_id: Optional[str] = None
     request: str

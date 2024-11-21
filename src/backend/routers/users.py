@@ -7,11 +7,34 @@ from pydantic import EmailStr
 from backend.logs.logger_config import logger
 from sqlmodel import Session, select
 from backend.models.user import User
-from backend.models.api_models import UserData
+from backend.models.api_models import UserData, UpdateUserData
 from backend.database import database_setup, crud, auth
 from backend.send_mail import registration_confirmation, send_verification_mail, send_password_reset_mail
 
 user_router = APIRouter(tags=["Users"])
+
+async def _get_user(db: Session = Depends(database_setup.get_session), token: str = Depends(auth.oauth2_schema)) -> User:
+    """
+    Another dependency injection of the oauth2_schema dependency injection to get access to the user's data
+    """
+    logger.info(f"Attempt to get user from token: {token}")
+
+    try:
+        username = auth.decode_access_token(token)["sub"]
+
+        logger.info(f"User {username} found")
+
+        return crud.get_user(db, username)
+    except Exception as e:
+        logger.warning(f"Error getting user, Exception: {e}")
+        raise HTTPException(status_code=500, detail=f"Error getting user: {e}")
+
+def is_demo_user(username: str) -> None:
+    if username == "guest":
+        raise HTTPException(
+            status_code=403,
+            detail=f"This action is not allowed for the demo account"
+        )
 
 @user_router.post("/users/create_user")
 async def create_user(user: UserData, db: Session = Depends(database_setup.get_session)) -> Dict[str, str]:
@@ -121,6 +144,7 @@ async def forgot_password(email: EmailStr, db: Session = Depends(database_setup.
         logger.warning(f"Error sending reset email to {email}, Exception: {e}")
         raise HTTPException(status_code=500, detail=f"Error sending reset email to {email}, Exception: {e}")
 
+
 @user_router.post("/users/reset_password")
 async def reset_password(email: EmailStr, reset_code: int, new_password: str, db: Session = Depends(database_setup.get_session)) -> Dict[str, str]:
     logger.info(f"Attempt to reset password for user with email {email}")
@@ -128,6 +152,8 @@ async def reset_password(email: EmailStr, reset_code: int, new_password: str, db
     try:
         statement = select(User).where(User.email == email)
         user = db.exec(statement).first()
+
+        is_demo_user(user.username)
 
         if not user:
             raise HTTPException(status_code=404, detail=f"User with email {email} not found")
@@ -151,30 +177,16 @@ async def reset_password(email: EmailStr, reset_code: int, new_password: str, db
         logger.warning(f"Error resetting password for user with {email}, Exception: {e}")
         raise HTTPException(status_code=500, detail=f"Error resetting password for user with {email}, Exception: {e}")
 
-async def _get_user(db: Session = Depends(database_setup.get_session), token: str = Depends(auth.oauth2_schema)) -> User:
-    """
-    Another dependency injection of the oauth2_schema dependency injection to get access to the user's data
-    """
-    logger.info(f"Attempt to get user from token: {token}")
-
-    try:
-        username = auth.decode_access_token(token)["sub"]
-
-        logger.info(f"User {username} found")
-
-        return crud.get_user(db, username)
-    except Exception as e:
-        logger.warning(f"Error getting user, Exception: {e}")
-        raise HTTPException(status_code=500, detail=f"Error getting user: {e}")
-
 @user_router.put("/users/update_user")
-async def update_user(updated_user: UserData, db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
+async def update_user(updated_user: UpdateUserData, db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
     logger.info(f"Attempt to update user: {user.username}")
 
     try:
-        updated_db_user = User(username=user.username, password=user.password, email=user.email)
+        is_demo_user(user.username)
 
-        crud.update_user(db, user, updated_db_user)
+        updated_db_user = User(username=updated_user.username, password=updated_user.password, email=updated_user.email)
+
+        crud.update_user(db, user, updated_db_user) # TODO identify by id instead
         logger.info(f"User {user.username} updated successfully")
 
         return {"message": f"User {user.username} updated successfully"}
@@ -187,7 +199,9 @@ async def delete_user(db: Session = Depends(database_setup.get_session), user: U
     logger.info(f"Attempt to delete user: {user.username}")
 
     try:
-        crud.delete_user(db, user)
+        is_demo_user(user.username)
+
+        crud.delete_user(db, user)  # TODO by id
         logger.info(f"User {user.username} deleted successfully")
 
         return {"message": f"User {user.username} deleted successfully"}
