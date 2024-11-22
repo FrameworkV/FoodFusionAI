@@ -25,9 +25,6 @@ def update_user(db: Session, user_id: int, updated_user: User):
     for key, value in updated_user.model_dump(exclude_unset=True).items():  #sql model objects are not natively iterable
         setattr(db_user, key, value)
 
-    for key, value in updated_user.model_dump(exclude_unset=True).items():  #sql model objects are not natively iterable
-        setattr(db_user, key, value)
-
         db.add(db_user)
         db.commit()
         db.refresh(db_user)
