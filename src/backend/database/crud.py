@@ -16,12 +16,15 @@ def get_user(db: Session, username: str):
 
 
 def update_user(db: Session, user_id: int, updated_user: User):
-    statement = select(User).where(User.id == updated_user.id)
+    statement = select(User).where(User.id == user_id)
     db_user = db.exec(statement).first()
 
     if not db_user:
         raise ValueError("user not found in database")
     
+    for key, value in updated_user.model_dump(exclude_unset=True).items():  #sql model objects are not natively iterable
+        setattr(db_user, key, value)
+
     for key, value in updated_user.model_dump(exclude_unset=True).items():  #sql model objects are not natively iterable
         setattr(db_user, key, value)
 
@@ -34,7 +37,11 @@ def update_user(db: Session, user_id: int, updated_user: User):
 
 def delete_user(db: Session, user_id: int):
     statement = select(User).where(User.id == user_id)
+def delete_user(db: Session, user_id: int):
+    statement = select(User).where(User.id == user_id)
     deleted_user = db.exec(statement).first()
+    if not deleted_user:
+        raise ValueError("user not found in database")
     if not deleted_user:
         raise ValueError("user not found in database")
     db.delete(deleted_user)
