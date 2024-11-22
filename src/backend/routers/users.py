@@ -186,7 +186,7 @@ async def update_user(updated_user: UpdateUserData, db: Session = Depends(databa
 
         updated_db_user = User(username=updated_user.username, password=updated_user.password, email=updated_user.email)
 
-        crud.update_user(db, user, updated_db_user) # TODO identify by id instead
+        crud.update_user(db, user.id, updated_db_user)
         logger.info(f"User {user.username} updated successfully")
 
         return {"message": f"User {user.username} updated successfully"}
@@ -201,7 +201,7 @@ async def delete_user(db: Session = Depends(database_setup.get_session), user: U
     try:
         is_demo_user(user.username)
 
-        crud.delete_user(db, user)  # TODO by id
+        crud.delete_user(db, user.id)
         logger.info(f"User {user.username} deleted successfully")
 
         return {"message": f"User {user.username} deleted successfully"}
