@@ -180,17 +180,20 @@ async def reset_password(email: EmailStr, reset_code: int, new_password: str, db
 @user_router.put("/users/update_user")
 async def update_user(updated_user: UpdateUserData, db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
     logger.info(f"Attempt to update user: {user.username}")
+    email_changed = False
 
     try:
         is_demo_user(user.username)
         old_email = user.email
         updated_db_user = User(username=updated_user.username, password=auth.create_password_hash(updated_user.password), email=updated_user.email)
-
+        email_changed = updated_db_user.email != old_email
+        if(email_changed):
+            updated_db_user.is_verified = 0
         crud.update_user(db, user.id, updated_db_user)
-        if(updated_db_user.email != old_email):    #new email needs to be verified too
-            user.is_verified = 0
-            token = auth.create_access_token(user)
-            resend_verification_email(updated_db_user)
+        if(email_changed):    #new email needs to be verified too
+            token = auth.create_access_token(updated_db_user)
+            #logger.info(f"Attempt to send verification email to user {user.username}")
+            send_verification_mail(updated_db_user.email, updated_db_user.username, token)
         logger.info(f"User {user.username} updated successfully")
 
         return {"message": f"User {user.username} updated successfully"}
