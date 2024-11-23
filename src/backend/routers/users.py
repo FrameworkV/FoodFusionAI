@@ -180,13 +180,20 @@ async def reset_password(email: EmailStr, reset_code: int, new_password: str, db
 @user_router.put("/users/update_user")
 async def update_user(updated_user: UpdateUserData, db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
     logger.info(f"Attempt to update user: {user.username}")
+    email_changed = False
 
     try:
         is_demo_user(user.username)
-
-        updated_db_user = User(username=updated_user.username, password=updated_user.password, email=updated_user.email)
-
-        crud.update_user(db, user, updated_db_user) # TODO identify by id instead
+        old_email = user.email
+        updated_db_user = User(username=updated_user.username, password=auth.create_password_hash(updated_user.password), email=updated_user.email)
+        email_changed = updated_db_user.email != old_email
+        if(email_changed):
+            updated_db_user.is_verified = 0
+        crud.update_user(db, user.id, updated_db_user)
+        if(email_changed):    #new email needs to be verified too
+            token = auth.create_access_token(updated_db_user)
+            #logger.info(f"Attempt to send verification email to user {user.username}")
+            send_verification_mail(updated_db_user.email, updated_db_user.username, token)
         logger.info(f"User {user.username} updated successfully")
 
         return {"message": f"User {user.username} updated successfully"}
@@ -201,7 +208,7 @@ async def delete_user(db: Session = Depends(database_setup.get_session), user: U
     try:
         is_demo_user(user.username)
 
-        crud.delete_user(db, user)  # TODO by id
+        crud.delete_user(db, user.id)
         logger.info(f"User {user.username} deleted successfully")
 
         return {"message": f"User {user.username} deleted successfully"}
