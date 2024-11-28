@@ -52,6 +52,10 @@ Availabe on **Android** and on the **web**
 - **Embeddings model**: models/text-embedding-004
 
 ### 🖥️ Backend
+  ![Architecture](./assets/architecture.drawio.png)
+
+<br>
+
 - **Python>=3.10**
 
   [![Python 3.10](https://img.shields.io/badge/Python-3.10-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/downloads/release/python-3100/)
