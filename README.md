@@ -8,10 +8,9 @@
   <p align="center">
     Open Source groceries management with AI (LLMs).
     <br /><br />
-    <a><strong>Website:</strong></a>
+    <a><strong>Give it a try:</strong></a>
     <br />
-    <br />
-
+    
    [![Website](https://img.shields.io/badge/Website-Click_here-blue?style=for-the-badge)](https://zealous-bush-0277f6903.5.azurestaticapps.net/)
   </p>
 </div>
