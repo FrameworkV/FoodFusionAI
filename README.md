@@ -8,12 +8,11 @@
   <p align="center">
     Open Source groceries management with AI (LLMs).
     <br /><br />
-    <a><strong>Try here:</strong></a>
+    <a><strong>Website:</strong></a>
     <br />
     <br />
-    <a href="TODO">Download on Android</a>
-    ·
-    <a href="TODO">Website</a>
+
+   [![Website](https://img.shields.io/badge/Website-Click_here-blue?style=for-the-badge)](https://zealous-bush-0277f6903.5.azurestaticapps.net/)
   </p>
 </div>
 
@@ -36,11 +35,9 @@ TODO insert demo video
 - **Recipes**: Suggestions based on current stocks, seasonal food, allergies and more 
 - **Reminders**: Reminds you if food is about to expire
 
-Availabe on **Android** and on the **web**
+Availabe on the **web** (App release coming soon!)
 
-[![Android](https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white)](here link to the app) 
-[![Website](https://img.shields.io/badge/Website-1DBF73?style=flat&logo=internet-explorer&logoColor=white)]here link to website)
-
+[![Website](https://img.shields.io/badge/Website-1DBF73?style=flat&logo=internet-explorer&logoColor=white)](https://zealous-bush-0277f6903.5.azurestaticapps.net/)
 
 <br><br>
 
@@ -88,5 +85,3 @@ The user database is additionally protected by several layers of security:
 Find anything related to the frontend here:
 
 https://github.com/FrameworkV/FoodFusionAI-Website
-
-https://github.com/FrameworkV/FoodFusionAI-App
