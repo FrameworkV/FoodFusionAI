@@ -1,4 +1,5 @@
 from sqlmodel import Session, SQLModel, create_engine
+from langchain_community.utilities import SQLDatabase
 from typing import Generator
 import os
 from backend.utils import config
@@ -24,7 +25,7 @@ else:
     engine = create_engine(url, echo=False)
 
 SQLModel.metadata.create_all(engine)    # create all provided tables (if not already existent)
-
+db = SQLDatabase.from_uri(url)          # langchain class for RAG in /llm
 
 def get_session() -> Generator:
     """

@@ -34,6 +34,7 @@ class ChatHistory:
         item = {
             "id": message_id,               # id defined by CosmosDB
             "user_id": str(self.user_id),   # partition key
+            "chat_id": self.chat_id,
             "message": message,
             "role": role,
         }
