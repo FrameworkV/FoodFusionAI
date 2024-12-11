@@ -4,10 +4,12 @@ from langchain.schema import BaseMessage
 from fastapi import APIRouter, Depends, HTTPException
 from sse_starlette.sse import EventSourceResponse
 from sqlmodel import Session
+from backend.utils import config
+from backend.llm.react_agent import react_agent
 from backend.database import crud, database_setup
 from backend.logs.logger_config import logger
 from backend.database import auth
-from backend.models.api_models import ModelResponse, UserRequest, ChatMessage
+from backend.models.api_models import ModelResponse, UserRequest
 from backend.models.user import User
 from backend.models.groceries import ShoppingList
 from backend.routers.users import _get_user
@@ -82,7 +84,7 @@ async def generate_recipe(user_request: UserRequest, user: User = Depends(_get_u
             }
         )
 
-        stream = False
+        stream = config['app']['status'] != "dev"   # stream = False for dev for easier debugging
 
         logger.info(f"User {user.username} successfully received a recipe response")
 
@@ -114,3 +116,34 @@ async def generate_shopping_list(recipe: str, db: Session = Depends(database_set
     except Exception as e:
         logger.warning(f"Error generating a shopping list for user {user.username}: {e}")
         raise HTTPException(status_code=500, detail=f"Error generating a shopping list for user {user.username}: {e}")
+
+@llm_router.post("/llm/model_request", dependencies=[Depends(auth.check_active)])
+async def model_request(user_request: UserRequest, user: User = Depends(_get_user)) -> ModelResponse:
+    logger.info(f"User {user.username} made a request: {user_request.request}")
+
+    try:
+        chat_id = user_request.chat_id
+
+        if not chat_id:  # first message: generate new id
+            chat_id = str(uuid.uuid4())
+
+        chat_history = ChatHistory(user_id=user.id, chat_id=chat_id)
+
+        chat_history.add_message(message=user_request.request, role="human")
+        response = react_agent(user.id, chat_history).invoke({"input": user_request.request})["output"]
+        chat_history.add_message(response, role="ai")
+
+        model_response = ModelResponse(
+            user_id=user.id,
+            chat_id=chat_id,
+            response=response,
+            streamed_response=False,
+            is_last=True
+        )
+
+        logger.info(f"User {user.username} successfully made a request")
+
+        return model_response
+    except Exception as e:
+        logger.warning(f"Error generating a response for user {user.username}: {e}")
+        raise HTTPException(status_code=500, detail=f"Error generating a response for user {user.username}: {e}")

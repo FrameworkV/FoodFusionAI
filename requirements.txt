@@ -11,6 +11,7 @@ azure-cosmos==4.8.0
 langchain==0.3.4
 langchain-community==0.3.3
 langchain-google-genai==2.0.1
+langgraph== 0.2.53
 pyyaml==6.0.2
 python-dotenv==1.0.1
 sqlmodel==0.0.22

@@ -9,7 +9,7 @@ from backend.routers.users import _get_user
 
 storage_router = APIRouter(tags=["Storage Management"])
 
-@storage_router.post("/upload_receipt")
+@storage_router.post("/items/upload_receipt")
 async def upload_receipt(receipt: UploadFile, db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
     try:
         logger.info(f"User {user.username} started uploading a receipt: {receipt.filename}")

@@ -15,18 +15,21 @@ Consider the user's dietary preferences: {preferences}.
 Make sure your ingredients fit the dietary preferences. If existent, use alternatives as stated in the following examples:
 - The user is asking for something typically non-vegan (such as eggs), automatically use a vegan alternative.
 - The user is asking for recipes with milk while being lactose intolerant, automatically use lactose free or plant-based milk.
-
-There are 2 main cases:
-1. The user has follow up questions, needs consultation or inspiration
-2. The user didn't include the following information in his requests:
-    2.1 Number of portions
-    2.2 Required cooking skill level
-
-If case 2 occurs, guide the user by asking him follow up questions so he can add the missing information.
-
-If none of the cases occur, only output the recipe.
 """
 
 shopping_list_prompt = """
 Create a shopping list with all needed ingredients and products based on this recipe: {recipe}
+"""
+
+sql_query_prompt = """
+Given an input question, create a syntactically correct {dialect} query to run to help find the answer. Unless the user specifies in his question a specific number of examples they wish to obtain, always return all results. Filter the results by the user_id {user_id}. You can order the results by a relevant column to return the most interesting examples in the database.
+
+Always query for all columns in the table.
+
+Pay attention to use only the column names that you can see in the table information. Be careful to not query for columns that do not exist. 
+
+Here are the table information:
+{table_info}
+
+Question: {input}
 """
