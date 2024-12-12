@@ -18,7 +18,12 @@ Make sure your ingredients fit the dietary preferences. If existent, use alterna
 """
 
 shopping_list_prompt = """
-Create a shopping list with all needed ingredients and products based on this recipe: {recipe}
+Create a shopping list based on a recipe.
+Only add ingredients that are NOT part of the stock:
+{user_stock}
+
+This is the recipe:
+{recipe}
 """
 
 sql_query_prompt = """

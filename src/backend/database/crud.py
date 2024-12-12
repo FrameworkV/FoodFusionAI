@@ -1,6 +1,6 @@
 from sqlmodel import Session, select
 from backend.models.user import User
-from backend.models.groceries import ShoppingList
+from backend.models.groceries import ShoppingList, Recipe, Item
 
 
 def create_user(db: Session, user: User):
@@ -53,6 +53,18 @@ def delete_user(db: Session, username: str):
     deleted_user = db.exec(statement).first()
     db.delete(deleted_user)
     db.commit()
+
+def get_recipe(db: Session, recipe_id: int):
+    statement = select(Recipe.content).where(Recipe.id == recipe_id)
+    result = db.exec(statement).first()
+
+    return result
+
+def get_user_stock(db: Session, user_id: int):
+    statement = select(Item).where(Item.user_id == user_id)
+    result = db.exec(statement).all()
+
+    return result
 
 def create_shopping_list(db: Session, shopping_list: ShoppingList):
     db.add(shopping_list)
