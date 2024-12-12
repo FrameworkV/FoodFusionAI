@@ -1,6 +1,6 @@
 from datetime import datetime
-from typing import Optional, List
-from sqlmodel import SQLModel, Field, Relationship
+from typing import Optional
+from sqlmodel import SQLModel, Field
 from pydantic import EmailStr
 
 class User(SQLModel, table=True):
@@ -11,6 +11,3 @@ class User(SQLModel, table=True):
     reset_code: Optional[int] = Field(default=None)
     reset_code_expiration: Optional[datetime] = Field(default=None)
     is_verified: bool = Field(default=False)
-
-    groceries: List["Item"] = Relationship(back_populates="user")
-

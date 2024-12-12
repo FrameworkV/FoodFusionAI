@@ -13,11 +13,13 @@ class UpdateUserData(BaseModel):
 
 class UserRequest(BaseModel):
     chat_id: Optional[str] = None
+    model: Literal["g-01-base", "g-01-reasoning"]
     request: str
 
 class ModelResponse(BaseModel):
     user_id: int
     chat_id: str
+    model: Literal["g-01-base", "g-01-reasoning"]
     response: str
     streamed_response: Optional[bool] = False
     is_last: Optional[bool] = False
