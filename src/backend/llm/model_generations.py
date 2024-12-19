@@ -8,7 +8,6 @@ from langchain_core.runnables import RunnableSerializable
 from backend.llm.prompts import recipe_system_prompt, shopping_list_prompt
 from langchain import hub
 from langchain.agents import AgentExecutor, create_structured_chat_agent
-from langchain.memory import ConversationBufferMemory
 from langchain_core.tools import Tool
 from backend.llm.rag import graph
 from backend.utils import llm
@@ -93,13 +92,9 @@ def react_agent(user_id: int, chat_history: ChatHistory):
 
     # ReAct agent prompt
     prompt = hub.pull("hwchase17/structured-chat-agent")
-
-    # ConversationBufferMemory stores the conversation history in RAM
-    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True, k=10)    # return_messages: return list, k: keep last k messages in memory
-
-    # add messages to memory
-    for message in chat_history.get_messages(formatted=True):
-        memory.chat_memory.add_message(message)
+    # modify agent prompt by adding the system prompt
+    prompt.input_variables.append("preferences")    # system prompt's placeholders
+    prompt.messages[0].prompt.template = recipe_system_prompt + prompt.messages[0].prompt.template
 
     agent = create_structured_chat_agent(llm=llm, tools=tools, prompt=prompt)
 
@@ -107,9 +102,7 @@ def react_agent(user_id: int, chat_history: ChatHistory):
         agent=agent,
         tools=tools,
         verbose=True,
-        memory=memory,
         handle_parsing_errors=True,  # handle any parsing errors gracefully
-
     )
 
     return agent_executor

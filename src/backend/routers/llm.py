@@ -82,7 +82,8 @@ async def model_request(user_request: UserRequest, user: User = Depends(_get_use
                     "chat_history": chat_history.get_messages(formatted=True)
                 }
             ),
-            "g-01-reasoning": lambda: react_agent(user.id, chat_history).invoke({"input": user_request.request})["output"]
+            # if adding more placeholders to the system prompt: add in react_agent()
+            "g-01-reasoning": lambda: react_agent(user.id, chat_history).invoke({"input": user_request.request, "preferences": ["glutenfrei", "vegan"], "chat_history": chat_history.get_messages(formatted=True)})["output"]
         }
 
         handler = model_handler.get(user_request.model)
