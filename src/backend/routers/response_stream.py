@@ -1,17 +1,18 @@
-from typing import Iterable, AsyncGenerator
+from typing import Union, Iterable, AsyncGenerator
 from langchain_core.messages import BaseMessage
 from backend.models.api_models import ModelResponse
 from backend.llm.chat_history.chat_history import ChatHistory
 
-async def stream_formatter(user_id: int, chat_id: str, response_stream: Iterable[BaseMessage], stream: bool = False) -> AsyncGenerator[ModelResponse, None]:
-    response = ""
+async def stream_formatter(user_id: int, chat_id: str, model: str, response_stream: Union[Iterable[BaseMessage], str]) -> AsyncGenerator[ModelResponse, None]:
+    if model == "g-01-base":
+        response = ""
 
-    if stream:
         for chunk in response_stream:
             response += chunk
             response_chunk = ModelResponse(
                 user_id=user_id,
                 chat_id=chat_id,
+                model=model,
                 response=chunk,
                 streamed_response=True
             )
@@ -21,6 +22,7 @@ async def stream_formatter(user_id: int, chat_id: str, response_stream: Iterable
         yield ModelResponse(    # indicate end of stream
             user_id=user_id,
             chat_id=chat_id,
+            model=model,
             response="",
             streamed_response=True,
             is_last=True
@@ -28,14 +30,12 @@ async def stream_formatter(user_id: int, chat_id: str, response_stream: Iterable
 
         ChatHistory(user_id=user_id, chat_id=chat_id).add_message(message=response, role="ai")
     else:
-        for chunk in response_stream:
-            response += chunk
-
-        ChatHistory(user_id=user_id, chat_id=chat_id).add_message(message=response, role="ai")  # no stream --> one element --> code after yield unreachable
+        ChatHistory(user_id=user_id, chat_id=chat_id).add_message(message=response_stream, role="ai")
 
         yield ModelResponse(
             user_id=user_id,
             chat_id=chat_id,
-            response=response,
+            model=model,
+            response=response_stream,
             is_last=True
         )
