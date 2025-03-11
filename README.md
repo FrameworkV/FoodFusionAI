@@ -17,6 +17,16 @@
 
 <br>
 
+> [!WARNING]
+> This application is under active development. Errors might occur.
+> 
+> **Test the frontend locally** with the hosted backend following [this](DEVELOPMENT.md) guide.
+
+> [!NOTE]
+> The application relies on the Azure and Gemini **free tiers**, so some development practices (such as In-memory instead of Redis cache, no VectorDB for RAG) are limited.
+>
+> **Cloud is expensive - so more features come with more users!** 
+
 ## Demo
 
 TODO insert demo video
