@@ -7,7 +7,7 @@ from foodfusionai.CONFIG import get_config
 config = get_config()
 # import all tables to create them
 from foodfusionai.models.user import User
-from foodfusionai.models.groceries import Item, ShoppingList
+from foodfusionai.models.groceries import Item, ShoppingList, Recipe
 # --------------------------------
 
 # Dev
