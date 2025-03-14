@@ -1,11 +1,12 @@
-import os
 import smtplib
 from email.message import EmailMessage
 from pydantic import EmailStr
-from backend.utils import config
+from foodfusionai.utils import project_config
+from foodfusionai.CONFIG import get_config
+config = get_config()
 
-smtp_email = os.getenv("EMAIL")
-smtp_password = os.getenv("EMAIL_PASSWORD")
+smtp_email = config.email
+smtp_password = config.email_password
 
 def registration_confirmation(username: str) -> str:
     email_content = f"""
@@ -82,10 +83,10 @@ def registration_confirmation(username: str) -> str:
 
 
 def _html_code_verification_mail(username: str, token: str) -> str:
-    if config['app']['status'] == "dev":
-        confirmation_link = f"http://localhost:{config['api']['local']['port']}/users/verify/{token}"
+    if project_config['app']['status'] == "dev":
+        confirmation_link = f"http://localhost:{project_config['api']['local']['port']}/users/verify/{token}"
     else:
-        confirmation_link = f"{config['api']['hosted']['url']}/users/verify/{token}"
+        confirmation_link = f"{project_config['api']['hosted']['url']}/users/verify/{token}"
 
     email_content = f"""
     <!DOCTYPE html>

@@ -8,6 +8,7 @@ class User(SQLModel, table=True):
     username: str = Field(index=True, unique=True)
     password: str
     email: EmailStr = Field(index=True, unique=True)
+    subscription_type: str
     reset_code: Optional[int] = Field(default=None)
     reset_code_expiration: Optional[datetime] = Field(default=None)
     is_verified: bool = Field(default=False)

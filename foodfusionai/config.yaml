@@ -4,8 +4,10 @@ app:
   status: "prod"                                              # set to "prod" when launching
 
 api:
-  version: "v0.0.1"
+  version: "v1"
   description: "Access to the LLM and the user's data"
+  allow_origins:
+    - "https://zealous-bush-0277f6903.5.azurestaticapps.net/"
   local:                                                      # local for development and testing purposes
     host: "0.0.0.0"
     port: 8000
@@ -14,7 +16,6 @@ api:
 
 llm:
   model_name: "gemini-1.5-flash"
-  embedding_model: "models/text-embedding-004"
   max_tokens: 1048576
   temperature: 0.7             
 
@@ -27,4 +28,3 @@ database:
 
 logging:
   level: "INFO"
-  path: "src/backend/logs/logs.log"           

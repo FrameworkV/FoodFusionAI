@@ -5,9 +5,9 @@ from langgraph.graph import START, StateGraph
 from pydantic import BaseModel
 from typing_extensions import TypedDict
 import codecs
-from backend.utils import llm
-from backend.llm.prompts import sql_query_prompt
-from backend.database.database_setup import db
+from foodfusionai.utils import llm
+from foodfusionai.llm.prompts import sql_query_prompt
+from foodfusionai.database.database_setup import db
 
 class State(TypedDict): # equivalent to dict at runtime --> allows to initialise subset of keys
     user_id: int

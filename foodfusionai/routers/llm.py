@@ -4,21 +4,21 @@ from langchain.schema import BaseMessage
 from fastapi import APIRouter, Depends, HTTPException
 from sse_starlette.sse import EventSourceResponse
 from sqlmodel import Session
-from backend.database import crud, database_setup
-from backend.logs.logger_config import logger
-from backend.database import auth
-from backend.models.api_models import ModelResponse, UserRequest
-from backend.models.user import User
-from backend.models.groceries import ShoppingList
-from backend.routers.users import _get_user
-from backend.routers.response_stream import stream_formatter
-from backend.llm.chat_history.chat_history import ChatHistory
-from backend.llm.model_generations import recipe, shopping_list, react_agent
+from foodfusionai.database import crud, database_setup
+from foodfusionai.logs.logger_config import logger
+from foodfusionai.database import auth
+from foodfusionai.models.api_models import ModelResponse, UserRequest
+from foodfusionai.models.user import User
+from foodfusionai.models.groceries import ShoppingList
+from foodfusionai.routers.users import _get_user
+from foodfusionai.routers.response_stream import stream_formatter
+from foodfusionai.llm.chat_history.chat_history import ChatHistory
+from foodfusionai.llm.model_generations import recipe, shopping_list, react_agent
 
-llm_router = APIRouter(tags=["LLM Requests"])
+llm_router = APIRouter()
 
 # get a list of all created chats
-@llm_router.get("/llm/get_chats")
+@llm_router.get("/get_chats")
 async def get_chats(user: User = Depends(_get_user)) -> List[Dict[str, str]]:
     logger.info(f"Attempt to retrieve all chats for user {user.username}")
     try:
@@ -33,7 +33,7 @@ async def get_chats(user: User = Depends(_get_user)) -> List[Dict[str, str]]:
         raise HTTPException(status_code=500, detail=f"Error retrieving all chats for user {user.username}: {e}")
 
 # get chat messages for a specific chat
-@llm_router.get("/llm/get_chat/{chat_id}")
+@llm_router.get("/get_chat/{chat_id}")
 async def get_chat(chat_id: str, user: User = Depends(_get_user)) -> Union[List[Dict[str, str]], List[BaseMessage]]:
     logger.info(f"Attempt to retrieve chat with id {chat_id} for user {user.username}")
 
@@ -48,7 +48,7 @@ async def get_chat(chat_id: str, user: User = Depends(_get_user)) -> Union[List[
         logger.warning(f"Error retrieving chat with id {chat_id} for user {user.username}: {e}")
         raise HTTPException(status_code=500, detail=f"Error retrieving chat with id {chat_id} for user {user.username}: {e}")
 
-@llm_router.delete("/llm/delete_chat/{chat_id}")
+@llm_router.delete("/delete_chat/{chat_id}")
 async def delete_chat(chat_id: str, user: User = Depends(_get_user)) -> Dict[str, str]:
     logger.info(f"Attempt to delete chat with id {chat_id} for user {user.username}")
 
@@ -62,7 +62,7 @@ async def delete_chat(chat_id: str, user: User = Depends(_get_user)) -> Dict[str
         logger.warning(f"Error deleting chat with id {chat_id} for user {user.username}: {e}")
         raise HTTPException(status_code=500, detail=f"Error deleting chat with id {chat_id} for user {user.username}: {e}")
 
-@llm_router.post("/llm/model_request", dependencies=[Depends(auth.check_active)])
+@llm_router.post("/model_request", dependencies=[Depends(auth.check_active)])
 async def model_request(user_request: UserRequest, user: User = Depends(_get_user)) -> ModelResponse:
     logger.info(f"User {user.username} made a request: {user_request.request}")
 
@@ -99,7 +99,7 @@ async def model_request(user_request: UserRequest, user: User = Depends(_get_use
         logger.warning(f"Error generating a response for user {user.username}: {e}")
         raise HTTPException(status_code=500, detail=f"Error generating a response for user {user.username}: {e}")
 
-@llm_router.post("/llm/generate_shopping_list", dependencies=[Depends(auth.check_active)])
+@llm_router.post("/generate_shopping_list", dependencies=[Depends(auth.check_active)])
 async def generate_shopping_list(recipe_id: int, db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
     logger.info(f"User {user.username} requested a shopping list for a recipe")
 

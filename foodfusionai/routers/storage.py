@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends, UploadFile, HTTPException
 from sqlmodel import Session
 from typing import Dict, List
-from backend.logs.logger_config import logger
-from backend.database import database_setup, crud
-from backend.models.user import User
-from backend.models.groceries import Item
-from backend.routers.users import _get_user
+from foodfusionai.logs.logger_config import logger
+from foodfusionai.database import database_setup, crud
+from foodfusionai.models.user import User
+from foodfusionai.models.groceries import Item
+from foodfusionai.routers.users import _get_user
 
-storage_router = APIRouter(tags=["Storage Management"])
+storage_router = APIRouter()
 
-@storage_router.post("/items/upload_receipt")
+@storage_router.post("/upload_receipt")
 async def upload_receipt(receipt: UploadFile, db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
     try:
         logger.info(f"User {user.username} started uploading a receipt: {receipt.filename}")
@@ -34,7 +34,7 @@ async def upload_receipt(receipt: UploadFile, db: Session = Depends(database_set
         logger.warning(f"Error uploading receipt for user {user.username}: {e}")
         raise HTTPException(status_code=500, detail=f"Error uploading receipt for user {user.username}: {e}")
     
-@storage_router.get("/items/get_items")
+@storage_router.get("/get_items")
 async def get_items(db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> List[Item]:
     logger.info(f"Attempt to retrieve items for user {user.username}")
 
@@ -48,7 +48,7 @@ async def get_items(db: Session = Depends(database_setup.get_session), user: Use
         logger.warning(f"Error retrieving items for user {user.username}: {e}")
         raise HTTPException(status_code=500, detail=f"Error retrieving items for user {user.username}: {e}")
 
-@storage_router.post("/items/add_items")
+@storage_router.post("/add_items")
 async def add_items(groceries: List[Item], db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
     logger.info(f"Attempt to add items for user {user.username}")
     
@@ -62,7 +62,7 @@ async def add_items(groceries: List[Item], db: Session = Depends(database_setup.
         logger.warning(f"Error adding items for user {user.username}: {e}")
         raise HTTPException(status_code=500, detail=f"Error adding items for user {user.username}: {e}")
 
-@storage_router.put("/items/update_items")
+@storage_router.put("/update_items")
 async def update_items(groceries: List[Item], db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
     logger.info(f"Attempt to delete items for user {user.username}")
     
@@ -76,7 +76,7 @@ async def update_items(groceries: List[Item], db: Session = Depends(database_set
         logger.warning(f"Error deleting items for user {user.username}: {e}")
         raise HTTPException(status_code=500, detail=f"Error deleting items for user {user.username}: {e}")
     
-@storage_router.delete("/items/delete_items")
+@storage_router.delete("/delete_items")
 async def delete_items(groceries: List[Item], db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
     logger.info(f"Attempt to delete items for user {user.username}")
     

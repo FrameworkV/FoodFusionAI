@@ -4,19 +4,16 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import HTMLResponse
 from typing import Dict
 from pydantic import EmailStr
-from backend.logs.logger_config import logger
+from foodfusionai.logs.logger_config import logger
 from sqlmodel import Session, select
-from backend.models.user import User
-from backend.models.api_models import UserData, UpdateUserData
-from backend.database import database_setup, crud, auth
-from backend.send_mail import registration_confirmation, send_verification_mail, send_password_reset_mail
+from foodfusionai.models.user import User
+from foodfusionai.models.api_models import UserData, UpdateUserData
+from foodfusionai.database import database_setup, crud, auth
+from foodfusionai.send_mail import registration_confirmation, send_verification_mail, send_password_reset_mail
 
-user_router = APIRouter(tags=["Users"])
+user_router = APIRouter()
 
 async def _get_user(db: Session = Depends(database_setup.get_session), token: str = Depends(auth.oauth2_schema)) -> User:
-    """
-    Another dependency injection of the oauth2_schema dependency injection to get access to the user's data
-    """
     logger.info(f"Attempt to get user from token: {token}")
 
     try:
@@ -36,11 +33,11 @@ def is_demo_user(username: str) -> None:
             detail=f"This action is not allowed for the demo account"
         )
 
-@user_router.post("/users/create_user")
+@user_router.post("/create_user")
 async def create_user(user: UserData, db: Session = Depends(database_setup.get_session)) -> Dict[str, str]:
     logger.info(f"Attempt to create user: {user.username}")
 
-    db_user = User(username=user.username, password=auth.create_password_hash(user.password), email=user.email)
+    db_user = User(username=user.username, password=auth.create_password_hash(user.password), email=user.email, subscription_type="standard")
 
     try:
         crud.create_user(db, db_user)
@@ -56,7 +53,7 @@ async def create_user(user: UserData, db: Session = Depends(database_setup.get_s
         logger.warning(f"Error creating user {user.username}, Exception: {e}")
         raise HTTPException(status_code=500, detail=f"Error creating user {user.username}, Exception: {e}")
 
-@user_router.post("/users/login")
+@user_router.post("/auth/login")
 async def login(db: Session = Depends(database_setup.get_session), data: OAuth2PasswordRequestForm = Depends()) -> Dict[str, str]:
     logger.info(f"Login attempt for user: {data.username}")
 
@@ -80,7 +77,7 @@ async def login(db: Session = Depends(database_setup.get_session), data: OAuth2P
         logger.warning(f"Error logging in user {data.username}, Exception: {e}")
         raise HTTPException(status_code=500, detail=f"Error logging in user {data.username}, Exception: {e}")
 
-@user_router.post("/users/resend_verification_email")
+@user_router.post("/auth/resend_verification_email")
 async def resend_verification_email(user: UserData) -> Dict[str, str]:
     logger.info(f"Attempt to resend verification email to user {user.email}")
 
@@ -96,7 +93,7 @@ async def resend_verification_email(user: UserData) -> Dict[str, str]:
         logger.warning(f"Error resending verification email to user {user.username}, Exception: {e}")
         raise HTTPException(status_code=500, detail=f"Error resending verification email to user {user.username}, Exception: {e}")
 
-@user_router.get("/users/verify/{token}", response_class=HTMLResponse)
+@user_router.get("/auth/verify/{token}", response_class=HTMLResponse)
 async def verify_user(token: str, db: Session = Depends(database_setup.get_session)) -> HTMLResponse:
     logger.info(f"Attempt to verify user with token {token} via email")
 
@@ -117,7 +114,7 @@ async def verify_user(token: str, db: Session = Depends(database_setup.get_sessi
         logger.warning(f"Error verifying user with token {token}, Exception: {e}")
         raise HTTPException(status_code=500, detail=f"Error verifying user with token {token}, Exception: {e}")
 
-@user_router.post("/users/forgot_password")
+@user_router.post("/auth/forgot_password")
 async def forgot_password(email: EmailStr, db: Session = Depends(database_setup.get_session)) -> Dict[str, str]:
     logger.info(f"Attempt to send email with reset code to {email}")
 
@@ -145,8 +142,9 @@ async def forgot_password(email: EmailStr, db: Session = Depends(database_setup.
         raise HTTPException(status_code=500, detail=f"Error sending reset email to {email}, Exception: {e}")
 
 
-@user_router.post("/users/reset_password")
-async def reset_password(email: EmailStr, reset_code: int, new_password: str, db: Session = Depends(database_setup.get_session)) -> Dict[str, str]:
+@user_router.post("/auth/reset_password")
+async def reset_password(email: EmailStr, reset_code: int, new_password: str, db: Session = Depends(
+    database_setup.get_session)) -> Dict[str, str]:
     logger.info(f"Attempt to reset password for user with email {email}")
 
     try:
@@ -177,7 +175,7 @@ async def reset_password(email: EmailStr, reset_code: int, new_password: str, db
         logger.warning(f"Error resetting password for user with {email}, Exception: {e}")
         raise HTTPException(status_code=500, detail=f"Error resetting password for user with {email}, Exception: {e}")
 
-@user_router.put("/users/update_user")
+@user_router.put("/auth/update_user")
 async def update_user(updated_user: UpdateUserData, db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
     logger.info(f"Attempt to update user: {user.username}")
     email_changed = False
@@ -201,7 +199,7 @@ async def update_user(updated_user: UpdateUserData, db: Session = Depends(databa
         logger.warning(f"Error updating user {user.username}, Exception: {e}")
         raise HTTPException(status_code=500, detail=f"Error updating user {user.username}, Exception: {e}")
     
-@user_router.delete("/users/delete_user")
+@user_router.delete("/auth/delete_user")
 async def delete_user(db: Session = Depends(database_setup.get_session), user: User = Depends(_get_user)) -> Dict[str, str]:
     logger.info(f"Attempt to delete user: {user.username}")
 
