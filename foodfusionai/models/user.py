@@ -3,6 +3,7 @@ from typing import Optional
 from sqlmodel import SQLModel, Field
 from pydantic import EmailStr
 
+# WARNING: VARCHAR(max) not allowed by Azure SQL database: max_length required
 class User(SQLModel, table=True):
     id: Optional[int] = Field(index=True, default=None, primary_key=True)  # automatically assign user id
     username: str = Field(index=True, unique=True, max_length=50)
