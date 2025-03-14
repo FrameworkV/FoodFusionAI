@@ -6,13 +6,16 @@ from fastapi import Depends, HTTPException
 from jose import jwt
 from datetime import timedelta
 from foodfusionai.models.user import User
+from foodfusionai.utils import project_config
 from foodfusionai.CONFIG import get_config
 config = get_config()
+
+api_version = project_config['api']['version']
 
 SECRET_KEY = config.jwt_secret_key
 ALGORITHM = "HS256"
 
-oauth2_schema = OAuth2PasswordBearer(tokenUrl="/users/login")
+oauth2_schema = OAuth2PasswordBearer(tokenUrl=f"/{api_version}/users/auth/login")
 
 def create_password_hash(password: str) -> str:
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
