@@ -7,7 +7,7 @@ from foodfusionai.utils import project_config
 from foodfusionai.routers.users import user_router
 from foodfusionai.routers.storage import storage_router
 from foodfusionai.routers.llm import llm_router
-from foodfusionai.redis_rate_limiting import get_user_identifier, get_user_type, get_rate_limit_rules, RedisRateLimitMiddleware
+# from foodfusionai.redis_rate_limiting import get_user_identifier, get_user_type, get_rate_limit_rules, RedisRateLimitMiddleware
 
 ALLOW_ORIGINS = (
     ["*"] if project_config['app']['status'] == "dev"
@@ -25,17 +25,17 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-rules, default_rule = get_rate_limit_rules()
-
-app.add_middleware(
-    RedisRateLimitMiddleware,
-    rate_limit_rules=rules,
-    default_rule=default_rule,
-    identifier_func=get_user_identifier,
-    user_type_func=get_user_type,
-    whitelist=["127.0.0.1"],
-    prefix="foodfusionai:ratelimit:"
-)
+# rules, default_rule = get_rate_limit_rules()
+#
+# app.add_middleware(
+#     RedisRateLimitMiddleware,
+#     rate_limit_rules=rules,
+#     default_rule=default_rule,
+#     identifier_func=get_user_identifier,
+#     user_type_func=get_user_type,
+#     whitelist=["127.0.0.1"],
+#     prefix="foodfusionai:ratelimit:"
+# )
 
 app.include_router(user_router, prefix=f"/{api_version}/users", tags=["Users"])
 app.include_router(storage_router, prefix=f"/{api_version}/items", tags=["Storage Management"])
