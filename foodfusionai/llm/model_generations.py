@@ -5,14 +5,14 @@ from langchain_core.messages import BaseMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import MessagesPlaceholder
 from langchain_core.runnables import RunnableSerializable
-from backend.llm.prompts import recipe_system_prompt, shopping_list_prompt
+from foodfusionai.llm.prompts import recipe_system_prompt, shopping_list_prompt
 from langchain import hub
 from langchain.agents import AgentExecutor, create_structured_chat_agent
 from langchain_core.tools import Tool
-from backend.llm.rag import graph
-from backend.utils import llm
-from backend.llm.chat_history.chat_history import ChatHistory
-from backend.database.database_setup import db
+from foodfusionai.llm.rag import graph
+from foodfusionai.utils import llm
+from foodfusionai.llm.chat_history.chat_history import ChatHistory
+from foodfusionai.database.database_setup import db
 
 def recipe(request: str) ->  RunnableSerializable[dict, BaseMessage]:
     messages = [

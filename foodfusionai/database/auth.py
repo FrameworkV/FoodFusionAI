@@ -4,15 +4,15 @@ from typing import Dict, Any
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, HTTPException
 from jose import jwt
-import os
 from datetime import timedelta
-from backend.models.user import User
+from foodfusionai.models.user import User
+from foodfusionai.CONFIG import get_config
+config = get_config()
 
-SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+SECRET_KEY = config.jwt_secret_key
 ALGORITHM = "HS256"
 
-# automate log in for secured endpoints
-oauth2_schema = OAuth2PasswordBearer(tokenUrl="/users/login")  # url equal to the path of the login endpoint
+oauth2_schema = OAuth2PasswordBearer(tokenUrl="/users/login")
 
 def create_password_hash(password: str) -> str:
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
@@ -24,6 +24,7 @@ def create_access_token(user: User, expires: timedelta = timedelta(minutes=15)) 
     claims = {
         "sub": user.username,
         "email": user.email,
+        "subscription_type": user.subscription_type,
         "active": user.is_verified
     }
 

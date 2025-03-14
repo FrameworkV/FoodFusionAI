@@ -2,9 +2,10 @@ import time
 from typing import List, Dict, Union
 from azure.cosmos import CosmosClient
 from langchain.schema import HumanMessage, AIMessage, BaseMessage
-import os
+from foodfusionai.CONFIG import get_config
+config = get_config()
 
-credential = os.getenv("AZURE_COSMOSDB_ACCESS_KEY")
+credential = config.azure_cosmosdb_access_key
 
 client = CosmosClient(url="https://foodfusionai.documents.azure.com:443/", credential=credential)
 
