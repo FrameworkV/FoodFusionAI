@@ -23,7 +23,7 @@
 > **Test the frontend locally** with the hosted backend following [this](DEVELOPMENT.md) guide.
 
 > [!NOTE]
-> The application relies on the Azure and Gemini **free tiers**, so some development practices (such as In-memory instead of Redis cache, no VectorDB for RAG) are limited.
+> The application relies on the Azure and Gemini **free tiers**, so we are limited to free offers (e.g. no VectorDB for RAG).
 >
 > **Cloud is expensive - so more features come with more users!** 
 
@@ -55,8 +55,6 @@ Availabe on the **web** (App release coming soon!)
 ### 🧠 LLM
 - **Model**: Gemini 1.5 Flash ![AI](https://img.shields.io/badge/AI-%2300BFFF.svg?&style=flat&logo=Artificial%20Intelligence&logoColor=white)
 
-- **Embeddings model**: models/text-embedding-004
-
 ### 🖥️ Backend
   ![Architecture](./assets/architecture.drawio.png)
 
@@ -83,6 +81,8 @@ Availabe on the **web** (App release coming soon!)
 #### Secured API endpoints
 All FastAPI endpoints are protected by security measures:
 - **Authentication and authorisation**: Only authenticated users can access protected resources (OAuth2, JWT)
+- **Timing Attacks protection**
+- **DDoS and Brute Force protection**: Using rate limiting with Redis cache 
 
 #### Protection of the user data
 

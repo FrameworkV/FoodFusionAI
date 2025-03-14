@@ -1,7 +1,7 @@
 from typing import Union, Iterable, AsyncGenerator
 from langchain_core.messages import BaseMessage
-from backend.models.api_models import ModelResponse
-from backend.llm.chat_history.chat_history import ChatHistory
+from foodfusionai.models.api_models import ModelResponse
+from foodfusionai.llm.chat_history.chat_history import ChatHistory
 
 async def stream_formatter(user_id: int, chat_id: str, model: str, response_stream: Union[Iterable[BaseMessage], str]) -> AsyncGenerator[ModelResponse, None]:
     if model == "g-01-base":

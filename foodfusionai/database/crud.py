@@ -1,6 +1,6 @@
 from sqlmodel import Session, select
-from backend.models.user import User
-from backend.models.groceries import ShoppingList, Recipe, Item
+from foodfusionai.models.user import User
+from foodfusionai.models.groceries import ShoppingList, Recipe, Item
 
 
 def create_user(db: Session, user: User):

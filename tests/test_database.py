@@ -1,8 +1,8 @@
 import unittest
 
-from backend.models.user import User
-from backend.models.groceries import Item
-from backend.database.database_setup import create_db_and_tables, get_session
+from foodfusionai.models import User
+from foodfusionai.models import Item
+from foodfusionai.database.database_setup import create_db_and_tables, get_session
 
 
 class TestDatabase(unittest.TestCase):
