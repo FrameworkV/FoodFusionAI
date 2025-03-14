@@ -18,3 +18,4 @@ pyyaml==6.0.2
 python-dotenv==1.0.1
 sqlmodel==0.0.22
 pydantic[email]==2.9.2
+redis==5.2.0
