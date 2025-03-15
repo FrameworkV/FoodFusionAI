@@ -1,5 +1,6 @@
 from functools import lru_cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from foodfusionai.utils import project_config
 
 class Config(BaseSettings):
     jwt_secret_key: str
@@ -18,3 +19,9 @@ class Config(BaseSettings):
 @lru_cache(maxsize=1)
 def get_config() -> Config:
     return Config()
+
+AUTH_ENDPOINT = f"{project_config['api']['version']}/users/auth/login"
+SUBSCRIPTION_TYPES = [  # default should be at index 0
+    "standard",
+    "premium"
+]
