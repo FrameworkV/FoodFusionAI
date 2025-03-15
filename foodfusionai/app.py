@@ -6,8 +6,10 @@ import uvicorn
 from foodfusionai.utils import project_config
 from foodfusionai.routers.users import user_router
 from foodfusionai.routers.storage import storage_router
-from foodfusionai.routers.llm import llm_router
+from foodfusionai.routers.llm import chats_router, llm_router
 from foodfusionai.redis_rate_limiting import get_rate_limit_rules, RedisRateLimitMiddleware
+
+# TODO local frontend testing not possible if ALLOW ORIGINS in Azure was added, remove DEVELOPMENT.md then
 
 api_version = project_config['api']['version']
 app = FastAPI(title=project_config['app']['title'], version=api_version)
@@ -22,6 +24,8 @@ app.add_middleware(
 
 rules, default_rule = get_rate_limit_rules()
 
+# TODO add router for chats -> v1/chats/... --> separate from llm router
+# add less strict rate limit rule for chats path because if the same as for llm calls, user cant see chats after limit exceeded
 app.add_middleware(
     RedisRateLimitMiddleware,
     rate_limit_rules=rules,
@@ -31,6 +35,7 @@ app.add_middleware(
 
 app.include_router(user_router, prefix=f"/{api_version}/users", tags=["Users"])
 app.include_router(storage_router, prefix=f"/{api_version}/items", tags=["Storage Management"])
+app.include_router(chats_router, prefix=f"/{api_version}/chats", tags=["Chats"])
 app.include_router(llm_router, prefix=f"/{api_version}/llm", tags=["LLM Requests"])
 
 @app.get("/")
