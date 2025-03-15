@@ -199,9 +199,15 @@ def get_rate_limit_rules() -> Tuple[List[RateLimitRule], RateLimitRule]:
                 "premium": {"limit": 1, "period": 60, "block": 1000}
             }
         ),
-
-        # allow premium users more LLM usage
-        # requests per day (86400s)
+        RateLimitRule(
+            f"/{api_version}/chats/*",
+            {
+                "standard": {"limit": 30, "period": 60, "block": 60},
+                "premium": {"limit": 30, "period": 60, "block": 60}
+            }
+        ),
+        # allow premium users more LLM usage,
+        # requests per day: (86400s)
         RateLimitRule(
             f"/{api_version}/llm/*",
             {

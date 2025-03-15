@@ -15,10 +15,11 @@ from foodfusionai.routers.response_stream import stream_formatter
 from foodfusionai.llm.chat_history.chat_history import ChatHistory
 from foodfusionai.llm.model_generations import recipe, shopping_list, react_agent
 
+chats_router = APIRouter()
 llm_router = APIRouter()
 
 # get a list of all created chats
-@llm_router.get("/get_chats")
+@chats_router.get("/get_chats")
 async def get_chats(user: User = Depends(_get_user)) -> List[Dict[str, str]]:
     logger.info(f"Attempt to retrieve all chats for user {user.username}")
     try:
@@ -33,7 +34,7 @@ async def get_chats(user: User = Depends(_get_user)) -> List[Dict[str, str]]:
         raise HTTPException(status_code=500, detail=f"Error retrieving all chats for user {user.username}: {e}")
 
 # get chat messages for a specific chat
-@llm_router.get("/get_chat/{chat_id}")
+@chats_router.get("/get_chat/{chat_id}")
 async def get_chat(chat_id: str, user: User = Depends(_get_user)) -> Union[List[Dict[str, str]], List[BaseMessage]]:
     logger.info(f"Attempt to retrieve chat with id {chat_id} for user {user.username}")
 
@@ -48,7 +49,7 @@ async def get_chat(chat_id: str, user: User = Depends(_get_user)) -> Union[List[
         logger.warning(f"Error retrieving chat with id {chat_id} for user {user.username}: {e}")
         raise HTTPException(status_code=500, detail=f"Error retrieving chat with id {chat_id} for user {user.username}: {e}")
 
-@llm_router.delete("/delete_chat/{chat_id}")
+@chats_router.delete("/delete_chat/{chat_id}")
 async def delete_chat(chat_id: str, user: User = Depends(_get_user)) -> Dict[str, str]:
     logger.info(f"Attempt to delete chat with id {chat_id} for user {user.username}")
 
