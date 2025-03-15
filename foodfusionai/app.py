@@ -7,14 +7,14 @@ from foodfusionai.utils import project_config
 from foodfusionai.routers.users import user_router
 from foodfusionai.routers.storage import storage_router
 from foodfusionai.routers.llm import llm_router
-from foodfusionai.redis_rate_limiting import get_user_identifier, get_user_type, get_rate_limit_rules, RedisRateLimitMiddleware
+from foodfusionai.redis_rate_limiting import get_rate_limit_rules, RedisRateLimitMiddleware
 
 api_version = project_config['api']['version']
 app = FastAPI(title=project_config['app']['title'], version=api_version)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],    # origin set to frontend only in Azure Web App
+    allow_origins=["*"],    # origins set in Azure Web App
     allow_credentials=True,
     allow_methods=["*"],  
     allow_headers=["*"]
@@ -26,9 +26,6 @@ app.add_middleware(
     RedisRateLimitMiddleware,
     rate_limit_rules=rules,
     default_rule=default_rule,
-    identifier_func=get_user_identifier,
-    user_type_func=get_user_type,
-    whitelist=["127.0.0.1"],
     prefix="foodfusionai:ratelimit:"
 )
 

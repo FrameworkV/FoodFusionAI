@@ -10,6 +10,7 @@ from foodfusionai.models.user import User
 from foodfusionai.models.api_models import UserData, UpdateUserData
 from foodfusionai.database import database_setup, crud, auth
 from foodfusionai.send_mail import registration_confirmation, send_verification_mail, send_password_reset_mail
+from foodfusionai.CONFIG import SUBSCRIPTION_TYPES
 
 user_router = APIRouter()
 
@@ -37,7 +38,7 @@ def is_demo_user(username: str) -> None:
 async def create_user(user: UserData, db: Session = Depends(database_setup.get_session)) -> Dict[str, str]:
     logger.info(f"Attempt to create user: {user.username}")
 
-    db_user = User(username=user.username, password=auth.create_password_hash(user.password), email=user.email, subscription_type="standard")
+    db_user = User(username=user.username, password=auth.create_password_hash(user.password), email=user.email, subscription_type=SUBSCRIPTION_TYPES[0])
 
     try:
         crud.create_user(db, db_user)

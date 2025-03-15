@@ -6,7 +6,7 @@ import hashlib
 from jose import JWTError
 from foodfusionai.database import auth
 from foodfusionai.utils import project_config
-from foodfusionai.CONFIG import get_config
+from foodfusionai.CONFIG import get_config, SUBSCRIPTION_TYPES
 config = get_config()
 
 def get_user_identifier(request: Request) -> str:
@@ -21,7 +21,6 @@ def get_user_identifier(request: Request) -> str:
     # fallback
     return request.client.host if request.client else "unknown"
 
-
 def get_user_type(request: Request) -> str:
     auth_header = request.headers.get("Authorization", "")
     if auth_header.startswith("Bearer "):
@@ -32,14 +31,15 @@ def get_user_type(request: Request) -> str:
             raise HTTPException(status_code=401, detail="Invalid or expired token")
 
         subscription_type = decoded_token.get("subscription_type")
-
         return subscription_type
+    else:  # default subscription type
+        return SUBSCRIPTION_TYPES[0]
 
 class RateLimitRule:
     def __init__(
-        self,
-        path_pattern: str,
-        user_types: Dict[str, Dict[str, int]]   # {"role": {"limit": limit_in_s, "period": period_in_s, "block": block_in_s}
+            self,
+            path_pattern: str,
+            user_types: Dict[str, Dict[str, int]] # {"role": {"limit": limit_in_s, "period": period_in_s, "block": block_in_s}
     ):
 
         self.path_pattern = path_pattern
@@ -71,7 +71,8 @@ class RateLimitRule:
         return True
 
     def get_limits_for_user_type(self, user_type: str) -> Dict[str, int]:
-         return self.user_types[user_type]
+        return self.user_types[user_type]
+
 
 class RedisRateLimitMiddleware(BaseHTTPMiddleware):
     def __init__(
@@ -107,9 +108,10 @@ class RedisRateLimitMiddleware(BaseHTTPMiddleware):
         return self.default_rule
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+
         identifier = self.identifier_func(request)
 
-        if identifier in self.whitelist:     # has ultimate access rights
+        if identifier in self.whitelist:  # has ultimate access rights
             return await call_next(request)
 
         user_type = self.user_type_func(request)
@@ -125,8 +127,8 @@ class RedisRateLimitMiddleware(BaseHTTPMiddleware):
         block_duration = limits.get("block")
 
         # block_duration 0 --> user not blocked, execute actual endpoint
-        if block_duration == 0 and user_type != "anonymous":
-            return await call_next(request)     # executes endpoint
+        if block_duration == 0:
+            return await call_next(request)  # executes endpoint
 
         count_key = f"{self.prefix}{path}:{user_type}:{identifier}"
         block_key = f"{self.prefix}blocked:{path}:{user_type}:{identifier}"
@@ -176,6 +178,7 @@ class RedisRateLimitMiddleware(BaseHTTPMiddleware):
             response.headers[key] = value
 
         return response
+
 
 def get_rate_limit_rules() -> Tuple[List[RateLimitRule], RateLimitRule]:
     api_version = project_config['api']['version']
