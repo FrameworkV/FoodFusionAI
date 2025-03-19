@@ -6,7 +6,7 @@ import hashlib
 from jose import JWTError
 from foodfusionai.database import auth
 from foodfusionai.utils import project_config
-from foodfusionai.CONFIG import get_config, SUBSCRIPTION_TYPES
+from foodfusionai.CONFIG import SUBSCRIPTION_TYPES, get_config
 config = get_config()
 
 def get_user_identifier(request: Request) -> str:

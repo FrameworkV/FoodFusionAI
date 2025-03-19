@@ -84,9 +84,9 @@ def registration_confirmation(username: str) -> str:
 
 def _html_code_verification_mail(username: str, token: str) -> str:
     if project_config['app']['status'] == "dev":
-        confirmation_link = f"http://localhost:{project_config['api']['local']['port']}/users/verify/{token}"
+        confirmation_link = f"http://localhost:{project_config['api']['local']['port']}/{project_config['api']['version']}/users/auth/verify/{token}"
     else:
-        confirmation_link = f"{project_config['api']['hosted']['url']}/users/verify/{token}"
+        confirmation_link = f"{project_config['api']['hosted']['url']}/{project_config['api']['version']}/users/auth/verify/{token}"
 
     email_content = f"""
     <!DOCTYPE html>
