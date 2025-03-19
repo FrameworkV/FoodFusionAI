@@ -24,8 +24,6 @@ app.add_middleware(
 
 rules, default_rule = get_rate_limit_rules()
 
-# TODO add router for chats -> v1/chats/... --> separate from llm router
-# add less strict rate limit rule for chats path because if the same as for llm calls, user cant see chats after limit exceeded
 app.add_middleware(
     RedisRateLimitMiddleware,
     rate_limit_rules=rules,
